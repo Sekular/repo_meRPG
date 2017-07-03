@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: e5ebb9be65373e54382969d1b097a3b9
+timeCreated: 1498972307
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - moveVisual: {fileID: 1893331784843614, guid: 34d43c70ebb986b439c2746f9bd47643,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

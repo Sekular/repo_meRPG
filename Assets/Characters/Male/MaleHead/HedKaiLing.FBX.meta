@@ -1,0 +1,168 @@
+fileFormatVersion: 2
+guid: 097b3ee53beb01a458d7a658e18390ce
+timeCreated: 1498052954
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: BIOG_HMM_HED_KaiLeng_MDL
+    100002: brow_Left
+    100004: brow_right
+    100006: cheek_Left
+    100008: cheek_right
+    100010: Chest
+    100012: Chest1
+    100014: Chest2
+    100016: Eye_Left
+    100018: Eye_Right
+    100020: eyeBlink_Left
+    100022: eyeBlink_Right
+    100024: God
+    100026: Head
+    100028: headBase
+    100030: //RootNode
+    100032: innerLowLip_left
+    100034: innerLowLip_right
+    100036: innerUpperLip_Left
+    100038: innerUpperLip_right
+    100040: jawBone
+    100042: LipCorner_Left
+    100044: LipCorner_right
+    100046: LowerBack
+    100048: LowerCheek_left
+    100050: lowerCheek_right
+    100052: lowerLip_Left
+    100054: lowerLip_right
+    100056: lowLid_Left
+    100058: lowLid_Right
+    100060: mouthBase
+    100062: Neck
+    100064: Neck1
+    100066: outBrow_left
+    100068: outBrow_Right
+    100070: outerUpperLip_left
+    100072: outerUpperLip_right
+    100074: Root
+    100076: Sneer
+    100078: Tongue
+    100080: underEye_left
+    100082: underEye_Right
+    100084: upperLip_Left
+    100086: upperLip_right
+    400000: BIOG_HMM_HED_KaiLeng_MDL
+    400002: brow_Left
+    400004: brow_right
+    400006: cheek_Left
+    400008: cheek_right
+    400010: Chest
+    400012: Chest1
+    400014: Chest2
+    400016: Eye_Left
+    400018: Eye_Right
+    400020: eyeBlink_Left
+    400022: eyeBlink_Right
+    400024: God
+    400026: Head
+    400028: headBase
+    400030: //RootNode
+    400032: innerLowLip_left
+    400034: innerLowLip_right
+    400036: innerUpperLip_Left
+    400038: innerUpperLip_right
+    400040: jawBone
+    400042: LipCorner_Left
+    400044: LipCorner_right
+    400046: LowerBack
+    400048: LowerCheek_left
+    400050: lowerCheek_right
+    400052: lowerLip_Left
+    400054: lowerLip_right
+    400056: lowLid_Left
+    400058: lowLid_Right
+    400060: mouthBase
+    400062: Neck
+    400064: Neck1
+    400066: outBrow_left
+    400068: outBrow_Right
+    400070: outerUpperLip_left
+    400072: outerUpperLip_right
+    400074: Root
+    400076: Sneer
+    400078: Tongue
+    400080: underEye_left
+    400082: underEye_Right
+    400084: upperLip_Left
+    400086: upperLip_right
+    4300000: BIOG_HMM_HED_KaiLeng_MDL
+    9500000: //RootNode
+    13700000: BIOG_HMM_HED_KaiLeng_MDL
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

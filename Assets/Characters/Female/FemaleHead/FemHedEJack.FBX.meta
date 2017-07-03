@@ -1,0 +1,172 @@
+fileFormatVersion: 2
+guid: c62c05c16c6859f4599ba52f2537a6b5
+timeCreated: 1498054932
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: brow_Left
+    100002: brow_right
+    100004: cheek_Left
+    100006: cheek_right
+    100008: Chest
+    100010: Chest1
+    100012: Chest2
+    100014: Eye_Left
+    100016: Eye_Right
+    100018: eyeBlink_Left
+    100020: eyeBlink_Right
+    100022: //RootNode
+    100024: God
+    100026: Head
+    100028: headBase
+    100030: HMF_HED_PROJack_MDL
+    100032: innerLowLip_left
+    100034: innerLowLip_right
+    100036: innerUpperLip_Left
+    100038: innerUpperLip_right
+    100040: jawBone
+    100042: LeftCollar
+    100044: LipCorner_Left
+    100046: LipCorner_right
+    100048: LowerBack
+    100050: LowerCheek_left
+    100052: lowerCheek_right
+    100054: lowerLip_Left
+    100056: lowerLip_right
+    100058: lowLid_Left
+    100060: lowLid_Right
+    100062: mouthBase
+    100064: Neck
+    100066: Neck1
+    100068: outBrow_left
+    100070: outBrow_Right
+    100072: outerUpperLip_left
+    100074: outerUpperLip_right
+    100076: RightCollar
+    100078: Root
+    100080: Sneer
+    100082: Tongue
+    100084: underEye_left
+    100086: underEye_Right
+    100088: upperLip_Left
+    100090: upperLip_right
+    400000: brow_Left
+    400002: brow_right
+    400004: cheek_Left
+    400006: cheek_right
+    400008: Chest
+    400010: Chest1
+    400012: Chest2
+    400014: Eye_Left
+    400016: Eye_Right
+    400018: eyeBlink_Left
+    400020: eyeBlink_Right
+    400022: //RootNode
+    400024: God
+    400026: Head
+    400028: headBase
+    400030: HMF_HED_PROJack_MDL
+    400032: innerLowLip_left
+    400034: innerLowLip_right
+    400036: innerUpperLip_Left
+    400038: innerUpperLip_right
+    400040: jawBone
+    400042: LeftCollar
+    400044: LipCorner_Left
+    400046: LipCorner_right
+    400048: LowerBack
+    400050: LowerCheek_left
+    400052: lowerCheek_right
+    400054: lowerLip_Left
+    400056: lowerLip_right
+    400058: lowLid_Left
+    400060: lowLid_Right
+    400062: mouthBase
+    400064: Neck
+    400066: Neck1
+    400068: outBrow_left
+    400070: outBrow_Right
+    400072: outerUpperLip_left
+    400074: outerUpperLip_right
+    400076: RightCollar
+    400078: Root
+    400080: Sneer
+    400082: Tongue
+    400084: underEye_left
+    400086: underEye_Right
+    400088: upperLip_Left
+    400090: upperLip_right
+    4300000: HMF_HED_PROJack_MDL
+    9500000: //RootNode
+    13700000: HMF_HED_PROJack_MDL
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

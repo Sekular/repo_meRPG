@@ -1,0 +1,132 @@
+fileFormatVersion: 2
+guid: ea89634c78908814e89295f33f3ede96
+timeCreated: 1498056413
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: CerDropShip_MDL_Cine
+    100004: LF_BackArm
+    100006: LF_BackEngine
+    100008: LF_BackShock
+    100010: LF_BottomDoor
+    100012: LF_FrontArm
+    100014: LF_FrontEngine
+    100016: LF_FrontShock
+    100018: LF_Latch_01
+    100020: LF_Latch_02
+    100022: LF_Latch_03
+    100024: LF_TopDoor
+    100026: Root
+    100028: RootOffset
+    100030: RT_BackArm
+    100032: RT_BackEngine
+    100034: RT_BackShock
+    100036: RT_BottomDoor
+    100038: RT_FrontArm
+    100040: RT_FrontEngine
+    100042: RT_FrontShock
+    100044: RT_Latch_01
+    100046: RT_Latch_02
+    100048: RT_Latch_03
+    100050: RT_TopDoor
+    400000: //RootNode
+    400002: CerDropShip_MDL_Cine
+    400004: LF_BackArm
+    400006: LF_BackEngine
+    400008: LF_BackShock
+    400010: LF_BottomDoor
+    400012: LF_FrontArm
+    400014: LF_FrontEngine
+    400016: LF_FrontShock
+    400018: LF_Latch_01
+    400020: LF_Latch_02
+    400022: LF_Latch_03
+    400024: LF_TopDoor
+    400026: Root
+    400028: RootOffset
+    400030: RT_BackArm
+    400032: RT_BackEngine
+    400034: RT_BackShock
+    400036: RT_BottomDoor
+    400038: RT_FrontArm
+    400040: RT_FrontEngine
+    400042: RT_FrontShock
+    400044: RT_Latch_01
+    400046: RT_Latch_02
+    400048: RT_Latch_03
+    400050: RT_TopDoor
+    4300000: CerDropShip_MDL_Cine
+    9500000: //RootNode
+    13700000: CerDropShip_MDL_Cine
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
