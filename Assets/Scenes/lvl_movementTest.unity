@@ -137,9 +137,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileX: 0
-  tileY: 0
+  tileZ: 0
   grid: {fileID: 0}
-  moveSpeed: 6
+  isMoving: 0
+  moveDist: 5
+  moveSpeed: 1
+  aimSpeed: 50
   aimDelay: 0.5
   fireTime: 1
   maxHealth: 50
@@ -282,9 +285,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileX: 0
-  tileY: 0
+  tileZ: 0
   grid: {fileID: 0}
-  moveSpeed: 6
+  isMoving: 0
+  moveDist: 5
+  moveSpeed: 1
+  aimSpeed: 50
   aimDelay: 0.5
   fireTime: 1
   maxHealth: 50
@@ -548,9 +554,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfda5c11b9e0d8b4cae6809098b40512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedUnit: {fileID: 878373843}
+  selectedActor: {fileID: 0}
   mapSizeX: 10
-  mapSizeY: 10
+  mapSizeZ: 10
   tileTypes:
   - name: Normal
     tileObject: {fileID: 1128420558970852, guid: baa695ae5422f5640abe02df5527b233,
@@ -684,7 +690,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4259550739409856, guid: 11c4aa6c74fb96c45a199b0bf050038a, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114192377343907980, guid: 11c4aa6c74fb96c45a199b0bf050038a,
         type: 2}
@@ -813,7 +819,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64daa1b1efc66c34b937afe1887944c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedActor: {fileID: 0}
   uiState: {fileID: 0}
   idleIcons: {fileID: 0}
   moveIcons: {fileID: 0}

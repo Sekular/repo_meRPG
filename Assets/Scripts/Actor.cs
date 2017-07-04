@@ -8,12 +8,17 @@ public class Actor : MonoBehaviour {
 	private Animator anim;
 
 	//___MOVEMENT_______________________________________________//
-	[HideInInspector] public int tileX, tileY;
+	[HideInInspector] public int tileX, tileZ;
 	[HideInInspector] public Grid grid;
 	[HideInInspector] public List<Node> currentPath = null;
+	private Vector3 lerpStart;
+	float moveStep = 0;
 
-	public float moveSpeed = 5;
+	[HideInInspector] public bool isMoving;
 
+	public float moveDist = 5;
+	public float moveSpeed = 1;
+	public float aimSpeed = 1;
 
 	//___COMBAT_________________________________________________//
 	private CombatManager combatManager;
@@ -57,22 +62,21 @@ public class Actor : MonoBehaviour {
 		hasMoved = false;
 	}
 
-
 	// This is currently drawing a line on click in conjunction with MoveTile.OnMouseUp(). Use this again later for showing the movement of characters.
-	/*void Update() {
+	public void ShowPathTo() {
 		if (currentPath != null) {
 			int currNode = 0;
 
 			while (currNode < currentPath.Count - 1) {
-				Vector3 start = grid.TileToWorld(currentPath[currNode].x, currentPath[currNode].y);
-				Vector3 end = grid.TileToWorld(currentPath[currNode + 1].x, currentPath[currNode + 1].y);
+				Vector3 start = grid.TileToWorld(currentPath[currNode].x, currentPath[currNode].z);
+				Vector3 end = grid.TileToWorld(currentPath[currNode + 1].x, currentPath[currNode + 1].z);
 
 				Debug.DrawLine(start, end, Color.red);
 
 				currNode++;
 			}
 		}
-	}*/
+	}
 
 	void FixedUpdate()
     {
@@ -96,38 +100,74 @@ public class Actor : MonoBehaviour {
     public void Selected()
     {
         selectedIcon.SetActive(true);
-    }
+		grid.DisplayAvailableMovement(moveDist);
+
+	}
 
     public void Deselected()
     {
         selectedIcon.SetActive(false);
     }
 
-	public void Move() {
-		float remainingMovement = moveSpeed;
-
+	public void Move(int x, int z) {
+		isMoving = true;
 		anim.SetBool("IsMoving", true);
+		grid.GeneratePathTo(x, z);
 
-		while (remainingMovement > 0) {
-			if (currentPath == null) { return; }
+		tileX = currentPath[1].x;
+		tileZ = currentPath[1].z;
+		lerpStart = transform.position;
 
-			// Get/take cost to move to next tile
-			remainingMovement -= grid.CostToEnterTile(currentPath[0].x, currentPath[0].y, currentPath[1].x, currentPath[1].y);
-
-			// Move Actor
-			tileX = currentPath[1].x;
-			tileY = currentPath[1].y;
-			transform.position = grid.TileToWorld(tileX, tileY);
-
-			// Remove current node from path (you've already reached it)
-			currentPath.RemoveAt(0);
-
-			// Reached destination, clear path-finding information
-			if (currentPath.Count == 1) { currentPath = null; }
-		}
+		StartCoroutine(MoveCR());
 	}
 
-    public void Attack()
+	IEnumerator MoveCR() {
+		AimAt(grid.TileToWorld(tileX, tileZ));
+
+		while (isMoving) {
+			if (Vector3.Distance(transform.position, grid.TileToWorld(tileX, tileZ)) < 0.01f) {
+				AdvancePathing();
+			}
+			
+			moveStep += Time.deltaTime * moveSpeed;
+
+			// Move Actor
+			transform.position = Vector3.Lerp(lerpStart, grid.TileToWorld(tileX, tileZ), moveStep);
+			yield return null;
+		}
+
+		anim.SetBool("IsMoving", false);
+	}
+
+	// Advances path-finding progress by one node.
+	void AdvancePathing() {
+		if (currentPath == null) { return; }
+
+		if (currentPath.Count == 1) {
+			// We only have one tile left in the path, and that tile MUST be our ultimate
+			// destination -- and we are standing on it!
+			// So let's just clear our path-finding info.
+			isMoving = false;
+			currentPath = null;
+			return;
+		}
+
+		// Move us to our correct "current" position, in case we
+		// haven't finished the animation yet.
+		transform.position = grid.TileToWorld(tileX, tileZ);
+
+		// Move us to the next tile in the sequence
+		tileX = currentPath[1].x;
+		tileZ = currentPath[1].z;
+		moveStep = 0f;
+		lerpStart = transform.position;
+		AimAt(grid.TileToWorld(tileX, tileZ));
+
+		// Remove the old "current" tile from the path-finding list
+		currentPath.RemoveAt(0);
+	}
+
+	public void Attack()
     {
         StartCoroutine(AttackCR());
     }
@@ -175,6 +215,25 @@ public class Actor : MonoBehaviour {
 			Debug.Log(gameObject.name + " has been incapacitated.");
 
 			// TODO Play death animation.
+		}
+	}
+
+	public void AimAt(Vector3 target) {
+		Debug.Log("Started Aiming");
+		StartCoroutine(AimAtCR(target));
+	}
+
+	public IEnumerator AimAtCR(Vector3 target) {
+		float aimStep = 0;
+
+		while(aimStep < 1f) {
+			Vector3 targetDir = target - transform.position;
+			aimStep += Time.deltaTime * aimSpeed;
+
+			Vector3 newDir = Vector3.RotateTowards(transform.forward, -targetDir, aimStep, 0.0F);
+			
+			transform.rotation = Quaternion.LookRotation(newDir);
+			yield return null;
 		}
 	}
 }

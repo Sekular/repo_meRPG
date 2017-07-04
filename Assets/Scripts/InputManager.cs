@@ -14,7 +14,7 @@ enum InputState
 
 public class InputManager : MonoBehaviour
 {
-    public Actor selectedActor = null;
+	private Grid grid;
 
     private CombatManager combatManager;
 
@@ -26,75 +26,58 @@ public class InputManager : MonoBehaviour
 	public GameObject sprintIcons;
 	public GameObject attackIcons;
 	public GameObject reloadIcons;
+	
+	void Start() {
+		grid = GameObject.Find("Grid").GetComponent<Grid>();
+		combatManager = GameObject.Find("CombatManager").GetComponent<CombatManager>();
+		//UpdateUIState(); // Turning off all UI related code until movement is complete.
+	}
 
-
-	void Start()
-    {
-        combatManager = GameObject.Find("CombatManager").GetComponent<CombatManager>();
-		//UpdateUIState();
-    }
-
-    void Update ()
-    {
+	void Update () {
 		RunInputs();
-		//UIInputs();
-    }
+		//UIInputs(); // Turning off all UI related code until movement is complete.
+	}
 
-	void RunInputs()
-	{
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			if (selectedActor)
-			{
-				selectedActor.Attack();
-				selectedActor.Deselected();
-				selectedActor = null;
+	void RunInputs() {
+		if (Input.GetKeyDown(KeyCode.Space)) {
+			if (grid.selectedActor) {
+				grid.selectedActor.Attack();
+				grid.selectedActor.Deselected();
+				grid.selectedActor = null;
 			}
-
 		}
 
-		if (Input.GetMouseButtonDown(0))
-		{
+		if (Input.GetMouseButtonDown(0)) {
 			RaycastHit hit;
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-			if (Physics.Raycast(ray, out hit, 100.0f))
-			{
-				if (hit.transform.GetComponent<Actor>())
-				{
-					if (hit.transform.GetComponent<Actor>().team == combatManager.activeTeam)
-					{
-						if (!hit.transform.GetComponent<Actor>().hasActed)
-						{
-							selectedActor = hit.transform.GetComponent<Actor>();
-							selectedActor.Selected();
+			if (Physics.Raycast(ray, out hit, 100.0f)) {
+				if (hit.transform.GetComponent<Actor>()) {
+					if (hit.transform.GetComponent<Actor>().team == combatManager.activeTeam) {
+						if (!hit.transform.GetComponent<Actor>().hasActed) {
+							grid.selectedActor = hit.transform.GetComponent<Actor>();
+							grid.selectedActor.Selected();
 						}
-						else
-						{
+						else {
 							Debug.Log("This character has already acted this turn!");
 						}
 					}
-					else
-					{
+					else {
 						Debug.Log("Not on active team!");
 					}
 				}
-				else if (hit.transform.GetComponent<MoveTile>())
-				{
-					if (selectedActor != null)
-					{
-						if (!selectedActor.hasMoved)
-						{
+				else if (hit.transform.GetComponent<MoveTile>()) {
+					if (grid.selectedActor != null) {
+						if (!grid.selectedActor.hasMoved) {
 							MoveTile gridSquare = hit.transform.GetComponent<MoveTile>();
-							selectedActor.Move();
-							selectedActor.hasMoved = true;
+							grid.ResetMovement();
+							grid.selectedActor.Move(gridSquare.tileX, gridSquare.tileZ);
+							grid.selectedActor.hasMoved = true;
 						}
-						else
-						{
+						else {
 							Debug.Log("This character has already moved.");
 						}
 					}
-
 				}
 			}
 		}
@@ -125,8 +108,8 @@ public class InputManager : MonoBehaviour
 			}
 			else if(Input.GetKeyDown(KeyCode.Escape))
 			{
-				selectedActor.Deselected();
-				selectedActor = null;
+				grid.selectedActor.Deselected();
+				grid.selectedActor = null;
 			}
 		}
 		else if(currentState == InputState.Moving)
@@ -168,7 +151,7 @@ public class InputManager : MonoBehaviour
 			if (Input.GetKeyDown(KeyCode.Alpha2))
 			{
 				// TODO Fire at current target
-				selectedActor.Attack();
+				grid.selectedActor.Attack();
 			}
 			else if (Input.GetKeyDown(KeyCode.Escape))
 			{
@@ -181,7 +164,7 @@ public class InputManager : MonoBehaviour
 			if (Input.GetKeyDown(KeyCode.Alpha3))
 			{
 				// TODO End current actor action
-				selectedActor.Reload();
+				grid.selectedActor.Reload();
 			}
 			else if (Input.GetKeyDown(KeyCode.Escape))
 			{
