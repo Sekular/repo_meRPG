@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-enum InputState
-{
+public enum InputState {
 	Idle,
 	Moving,
 	Sprinting,
@@ -12,41 +11,26 @@ enum InputState
 	Reloading
 }
 
-public class InputManager : MonoBehaviour
-{
+public class InputManager : MonoBehaviour {
 	private Grid grid;
 
     private CombatManager combatManager;
+	public List<Actor> targets;
 
-	private InputState currentState = InputState.Idle;
-	public TextMesh uiState;
-
-	public GameObject idleIcons;
-	public GameObject moveIcons;
-	public GameObject sprintIcons;
-	public GameObject attackIcons;
-	public GameObject reloadIcons;
+	[HideInInspector] public InputState currentState = InputState.Idle;
 	
 	void Start() {
 		grid = GameObject.Find("Grid").GetComponent<Grid>();
 		combatManager = GameObject.Find("CombatManager").GetComponent<CombatManager>();
-		//UpdateUIState(); // Turning off all UI related code until movement is complete.
+		UpdateUIState();
 	}
 
 	void Update () {
 		RunInputs();
-		//UIInputs(); // Turning off all UI related code until movement is complete.
+		UIInputs(); 
 	}
 
 	void RunInputs() {
-		if (Input.GetKeyDown(KeyCode.Space)) {
-			if (grid.selectedActor) {
-				grid.selectedActor.Attack();
-				grid.selectedActor.Deselected();
-				grid.selectedActor = null;
-			}
-		}
-
 		if (Input.GetMouseButtonDown(0)) {
 			RaycastHit hit;
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -54,13 +38,22 @@ public class InputManager : MonoBehaviour
 			if (Physics.Raycast(ray, out hit, 100.0f)) {
 				if (hit.transform.GetComponent<Actor>()) {
 					if (hit.transform.GetComponent<Actor>().team == combatManager.activeTeam) {
-						if (!hit.transform.GetComponent<Actor>().hasActed) {
+						if(grid.selectedActor != null) {
+							if (hit.transform.name == grid.selectedActor.name) {
+								grid.selectedActor.Deselected();
+								grid.selectedActor = null;
+							}
+						}
+						else if (!hit.transform.GetComponent<Actor>().hasActed) {
 							grid.selectedActor = hit.transform.GetComponent<Actor>();
 							grid.selectedActor.Selected();
 						}
 						else {
 							Debug.Log("This character has already acted this turn!");
 						}
+					}
+					else if (hit.transform.GetComponent<Actor>().isTargeted) {
+						grid.selectedActor.Attack(hit.transform.GetComponent<Actor>());
 					}
 					else {
 						Debug.Log("Not on active team!");
@@ -73,6 +66,8 @@ public class InputManager : MonoBehaviour
 							grid.ResetMovement();
 							grid.selectedActor.Move(gridSquare.tileX, gridSquare.tileZ);
 							grid.selectedActor.hasMoved = true;
+							currentState = InputState.Idle;
+							UpdateUIState();
 						}
 						else {
 							Debug.Log("This character has already moved.");
@@ -83,106 +78,115 @@ public class InputManager : MonoBehaviour
 		}
 	}
 
-	// Turning off all UI related code until movement is complete.
-	/*
 	void UIInputs()
 	{
-		uiState.text = currentState.ToString();
+		Debug.Log(currentState);
 
-		if (currentState == InputState.Idle)
-		{
-			if(Input.GetKeyDown(KeyCode.Alpha1))
-			{
-				currentState = InputState.Moving;
-				UpdateUIState();
+		if (currentState == InputState.Idle) {
+			if(Input.GetKeyDown(KeyCode.Alpha1)) {
+				if (!grid.selectedActor.hasMoved) {
+					currentState = InputState.Moving;
+					UpdateUIState();
+				}
 			}
-			else if(Input.GetKeyDown(KeyCode.Alpha2))
-			{
+			else if(Input.GetKeyDown(KeyCode.Alpha2)) {
 				currentState = InputState.Aiming;
 				UpdateUIState();
 			}
-			else if (Input.GetKeyDown(KeyCode.Alpha3))
-			{
+			else if (Input.GetKeyDown(KeyCode.Alpha3)) {
 				currentState = InputState.Reloading;
 				UpdateUIState();
 			}
-			else if(Input.GetKeyDown(KeyCode.Escape))
-			{
+			else if(Input.GetKeyDown(KeyCode.Escape)) {
 				grid.selectedActor.Deselected();
 				grid.selectedActor = null;
 			}
 		}
-		else if(currentState == InputState.Moving)
-		{
-			if (Input.GetKeyDown(KeyCode.Alpha1))
-			{
+		else if(currentState == InputState.Moving) {
+			if (Input.GetKeyDown(KeyCode.Alpha1)) {
 				currentState = InputState.Sprinting;
 				UpdateUIState();
 			}
-			else if (Input.GetKeyDown(KeyCode.Escape))
-			{
+			else if (Input.GetKeyDown(KeyCode.Escape)) {
 				currentState = InputState.Idle;
 				UpdateUIState();
 			}
 		}
-		else if(currentState == InputState.Sprinting)
-		{
-			if (Input.GetKeyDown(KeyCode.Escape))
-			{
+		else if(currentState == InputState.Sprinting) {
+			if (Input.GetKeyDown(KeyCode.Escape)) {
 				currentState = InputState.Moving;
 				UpdateUIState();
 			}
 		}
-		else if (currentState == InputState.Aiming)
-		{
-			if (Input.GetKeyDown(KeyCode.Alpha2))
-			{
+		else if (currentState == InputState.Aiming) {
+			if (Input.GetKeyDown(KeyCode.Alpha2)) {
 				currentState = InputState.Attacking;
 				UpdateUIState();
 			}
-			else if (Input.GetKeyDown(KeyCode.Escape))
-			{
+			else if (Input.GetKeyDown(KeyCode.Escape)) {
 				currentState = InputState.Idle;
 				UpdateUIState();
 			}
 		}
-		else if (currentState == InputState.Attacking)
-		{
-			if (Input.GetKeyDown(KeyCode.Alpha2))
-			{
+		else if (currentState == InputState.Attacking) {
+			if (Input.GetKeyDown(KeyCode.Alpha2)) {
 				// TODO Fire at current target
-				grid.selectedActor.Attack();
 			}
-			else if (Input.GetKeyDown(KeyCode.Escape))
-			{
+			else if (Input.GetKeyDown(KeyCode.Escape)) {
 				currentState = InputState.Idle;
 				UpdateUIState();
 			}
 		}
-		else if (currentState == InputState.Reloading)
-		{
-			if (Input.GetKeyDown(KeyCode.Alpha3))
-			{
+		else if (currentState == InputState.Reloading) {
+			if (Input.GetKeyDown(KeyCode.Alpha3)) {
 				// TODO End current actor action
 				grid.selectedActor.Reload();
 			}
-			else if (Input.GetKeyDown(KeyCode.Escape))
-			{
+			else if (Input.GetKeyDown(KeyCode.Escape)) {
 				currentState = InputState.Idle;
 				UpdateUIState();
 			}
 		}
 	}
 
-	public void UpdateUIState()
-	{
-		switch(currentState)
-		{
+	void HighlightTargets(float range) {
+		targets.Clear();
+
+		foreach (Actor actor in combatManager.team1) {
+			if(actor.team != grid.selectedActor.team) {
+				if((Vector3.Distance(grid.selectedActor.transform.position, actor.transform.position)) < range) {
+					targets.Add(actor);
+				}
+			}
+		}
+
+		foreach (Actor actor in combatManager.team2) {
+			if (actor.team != grid.selectedActor.team) {
+				if ((Vector3.Distance(grid.selectedActor.transform.position, actor.transform.position)) < range) {
+					targets.Add(actor);
+				}
+			}
+		}
+
+		foreach(Actor target in targets) {
+			target.SetTargeted();
+		}
+	}
+
+	void ClearTargets() {
+		foreach (Actor target in targets) {
+			target.ClearTargeted();
+		}
+	}
+
+	public void UpdateUIState() {
+		switch(currentState) {
 			case InputState.Idle:
 				IdleState();
 				break;
 			case InputState.Moving:
 				MoveState();
+				grid.DisplayAvailableMovement(grid.selectedActor.moveDist);
 				break;
 			case InputState.Sprinting:
 				SprintingState();
@@ -199,57 +203,27 @@ public class InputManager : MonoBehaviour
 		}
 	}
 
-	void IdleState()
-	{
-		idleIcons.SetActive(true);
-		moveIcons.SetActive(false);
-		sprintIcons.SetActive(false);
-		attackIcons.SetActive(false);
-		reloadIcons.SetActive(false);
+	void IdleState() {
+		ClearTargets();
 	}
 
-	void MoveState()
-	{
-		idleIcons.SetActive(false);
-		moveIcons.SetActive(true);
-		sprintIcons.SetActive(false);
-		attackIcons.SetActive(false);
-		reloadIcons.SetActive(false);
+	void MoveState() {
+		ClearTargets();
 	}
 
-	void SprintingState()
-	{
-		idleIcons.SetActive(false);
-		moveIcons.SetActive(false);
-		sprintIcons.SetActive(true);
-		attackIcons.SetActive(false);
-		reloadIcons.SetActive(false);
+	void SprintingState() {
+		ClearTargets();
 	}
 
-	void AimingState()
-	{
-		idleIcons.SetActive(false);
-		moveIcons.SetActive(false);
-		sprintIcons.SetActive(false);
-		attackIcons.SetActive(true);
-		reloadIcons.SetActive(false);
+	void AimingState() {
+		HighlightTargets(grid.selectedActor.weapon.range);
 	}
 
-	void AttackingState()
-	{
-		idleIcons.SetActive(false);
-		moveIcons.SetActive(false);
-		sprintIcons.SetActive(false);
-		attackIcons.SetActive(true);
-		reloadIcons.SetActive(false);
+	void AttackingState() {
+		ClearTargets();
 	}
 
-	void ReloadingState()
-	{
-		idleIcons.SetActive(false);
-		moveIcons.SetActive(false);
-		sprintIcons.SetActive(false);
-		attackIcons.SetActive(false);
-		reloadIcons.SetActive(true);
-	}*/
+	void ReloadingState() {
+		ClearTargets();
+	}
 }

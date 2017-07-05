@@ -22,7 +22,7 @@ public class Actor : MonoBehaviour {
 
 	//___COMBAT_________________________________________________//
 	private CombatManager combatManager;
-	private Weapon weapon;
+	[HideInInspector] public Weapon weapon;
 
 	private bool isAttacking;
 	public float aimDelay;
@@ -40,6 +40,9 @@ public class Actor : MonoBehaviour {
 
 	public GameObject availableIcon;
 	public GameObject selectedIcon;
+	public GameObject targetedIcon;
+
+	[HideInInspector] public bool isTargeted;
 
 	private InputManager input;
 
@@ -52,6 +55,7 @@ public class Actor : MonoBehaviour {
 
 		availableIcon.SetActive(false);
 		selectedIcon.SetActive(false);
+		targetedIcon.SetActive(false);
 
 		currentHealth = maxHealth;
 	}
@@ -78,34 +82,26 @@ public class Actor : MonoBehaviour {
 		}
 	}
 
-	void FixedUpdate()
-    {
-        if (isAwaitingOrders && !hasActed && !isIncap)
-        {
-            if (combatManager.activeTeam == team)
-            {
+	void FixedUpdate() {
+        if (isAwaitingOrders && !hasActed && !isIncap) {
+            if (combatManager.activeTeam == team) {
                 availableIcon.SetActive(true);
             }
-            else
-            {
+            else {
                 availableIcon.SetActive(false);
             }
         }
-        else
-        {
+		else {
             availableIcon.SetActive(false);
         }
+		
     }
 
-    public void Selected()
-    {
+    public void Selected() {
         selectedIcon.SetActive(true);
-		grid.DisplayAvailableMovement(moveDist);
-
 	}
 
-    public void Deselected()
-    {
+    public void Deselected() {
         selectedIcon.SetActive(false);
     }
 
@@ -167,17 +163,20 @@ public class Actor : MonoBehaviour {
 		currentPath.RemoveAt(0);
 	}
 
-	public void Attack()
+	public void Attack(Actor target)
     {
-        StartCoroutine(AttackCR());
+        StartCoroutine(AttackCR(target));
     }
 
-    public IEnumerator AttackCR()
+    public IEnumerator AttackCR(Actor target)
     {
-        anim.SetBool("IsAiming", true);
+		AimAt(target.transform.position);
+
+		anim.SetBool("IsAiming", true);
         yield return new WaitForSeconds(aimDelay);
         weapon.Fire();
-        yield return new WaitForSeconds(fireTime);
+		target.TakeDamage(weapon.damage);
+		yield return new WaitForSeconds(fireTime);
         anim.SetBool("IsAiming", false);
         isAttacking = false;
 
@@ -219,7 +218,6 @@ public class Actor : MonoBehaviour {
 	}
 
 	public void AimAt(Vector3 target) {
-		Debug.Log("Started Aiming");
 		StartCoroutine(AimAtCR(target));
 	}
 
@@ -235,5 +233,15 @@ public class Actor : MonoBehaviour {
 			transform.rotation = Quaternion.LookRotation(newDir);
 			yield return null;
 		}
+	}
+
+	public void SetTargeted() {
+		isTargeted = true;
+		targetedIcon.SetActive(true);
+	}
+
+	public void ClearTargeted() {
+		isTargeted = false;
+		targetedIcon.SetActive(false);
 	}
 }
