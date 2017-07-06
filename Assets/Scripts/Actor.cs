@@ -24,7 +24,6 @@ public class Actor : MonoBehaviour {
 	private CombatManager combatManager;
 	[HideInInspector] public Weapon weapon;
 
-	private bool isAttacking;
 	public float aimDelay;
 	public float fireTime;
 
@@ -41,28 +40,27 @@ public class Actor : MonoBehaviour {
 	public GameObject availableIcon;
 	public GameObject selectedIcon;
 	public GameObject targetedIcon;
+	public GameObject reloadIcon;
 
 	[HideInInspector] public bool isTargeted;
 
-	private InputManager input;
 
 	void Start() {
 		anim = GetComponentInChildren<Animator>();
 		weapon = GetComponentInChildren<Weapon>();
 		combatManager = GameObject.Find("CombatManager").GetComponent<CombatManager>();
 		grid = GameObject.Find("Grid").GetComponent<Grid>();
-		input = GameObject.Find("Main Camera").GetComponent<InputManager>();
-
+		
 		availableIcon.SetActive(false);
 		selectedIcon.SetActive(false);
 		targetedIcon.SetActive(false);
+		reloadIcon.SetActive(false);
 
 		currentHealth = maxHealth;
 	}
 
 	public void ResetActions() {
 		hasActed = false;
-		isIncap = false;
 		hasMoved = false;
 	}
 
@@ -178,7 +176,6 @@ public class Actor : MonoBehaviour {
 		target.TakeDamage(weapon.damage);
 		yield return new WaitForSeconds(fireTime);
         anim.SetBool("IsAiming", false);
-        isAttacking = false;
 
         hasActed = true;
 
@@ -199,9 +196,17 @@ public class Actor : MonoBehaviour {
         }
     }
 
-	public void Reload()
-	{
+	public void ReloadActive() {
+		reloadIcon.SetActive(true);
+	}
+
+	public void ReloadDeactive() {
+		reloadIcon.SetActive(false);
+	}
+
+	public void Reload() {
 		weapon.currentHeat = 0;
+		hasActed = true;
 	}
 
 	public void TakeDamage(int damage)

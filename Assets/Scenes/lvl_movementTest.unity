@@ -154,7 +154,8 @@ MonoBehaviour:
   team: 0
   availableIcon: {fileID: 1137065324}
   selectedIcon: {fileID: 1137065322}
-  targetedIcon: {fileID: 1137065325}
+  targetedIcon: {fileID: 604093225}
+  reloadIcon: {fileID: 1137065325}
   isTargeted: 0
 --- !u!4 &171422333
 Transform:
@@ -355,6 +356,11 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 338246319}
+--- !u!1 &604093225 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1211463115417036, guid: 11c4aa6c74fb96c45a199b0bf050038a,
+    type: 2}
+  m_PrefabInternal: {fileID: 1137065321}
 --- !u!1 &629320330
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,7 +373,7 @@ GameObject:
   - component: {fileID: 629320333}
   - component: {fileID: 629320332}
   m_Layer: 5
-  m_Name: Attack
+  m_Name: Aim
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -387,9 +393,9 @@ RectTransform:
   m_Father: {fileID: 316299592}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -470, y: 64}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 209, y: 87}
   m_SizeDelta: {x: 112, y: 124}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &629320332
@@ -430,7 +436,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 629320333}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1804858231}
+        m_MethodName: Aim
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &629320333
@@ -527,6 +544,7 @@ MonoBehaviour:
   availableIcon: {fileID: 1256758619}
   selectedIcon: {fileID: 1352432162}
   targetedIcon: {fileID: 1256758617}
+  reloadIcon: {fileID: 1235420762}
   isTargeted: 0
 --- !u!136 &878373846
 CapsuleCollider:
@@ -771,6 +789,33 @@ GameObject:
   m_PrefabParentObject: {fileID: 1480457256512842, guid: 11c4aa6c74fb96c45a199b0bf050038a,
     type: 2}
   m_PrefabInternal: {fileID: 1137065321}
+--- !u!114 &1137065326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1137065325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac0cd5bc831b12e4899a7f3812925a1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1235420762 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1480457256512842, guid: 11c4aa6c74fb96c45a199b0bf050038a,
+    type: 2}
+  m_PrefabInternal: {fileID: 1256758616}
+--- !u!114 &1235420764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1235420762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac0cd5bc831b12e4899a7f3812925a1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1250199491
 GameObject:
   m_ObjectHideFlags: 0
@@ -803,9 +848,9 @@ RectTransform:
   m_Father: {fileID: 316299592}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -348, y: 64}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 331, y: 87}
   m_SizeDelta: {x: 112, y: 124}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1250199493
@@ -846,7 +891,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1250199494}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1804858231}
+        m_MethodName: Reload
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1250199494
@@ -926,7 +982,7 @@ Prefab:
   m_IsPrefabParent: 0
 --- !u!1 &1256758617 stripped
 GameObject:
-  m_PrefabParentObject: {fileID: 1480457256512842, guid: 11c4aa6c74fb96c45a199b0bf050038a,
+  m_PrefabParentObject: {fileID: 1211463115417036, guid: 11c4aa6c74fb96c45a199b0bf050038a,
     type: 2}
   m_PrefabInternal: {fileID: 1256758616}
 --- !u!4 &1256758618 stripped
@@ -1052,9 +1108,9 @@ RectTransform:
   m_Father: {fileID: 316299592}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -593, y: 64}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 86, y: 87}
   m_SizeDelta: {x: 112, y: 124}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1661347345
@@ -1095,7 +1151,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1661347346}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1804858231}
+        m_MethodName: Move
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1661347346
@@ -1234,6 +1301,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targets: []
   currentState: 0
+  moveButton: {fileID: 1661347345}
+  aimButton: {fileID: 629320332}
+  reloadButton: {fileID: 1250199493}
 --- !u!1 &1807034623
 GameObject:
   m_ObjectHideFlags: 0
