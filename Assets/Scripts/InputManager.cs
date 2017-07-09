@@ -22,10 +22,22 @@ public class InputManager : MonoBehaviour {
 	public Button moveButton;
 	public Button aimButton;
 	public Button reloadButton;
+
+	public Canvas characterCanvas;
+	public Text cName;
+	public Text cShield;
+	public Text cHealth;
+	public Text cHeat;
+	public Image cPortrait;
 	
 	void Start() {
 		grid = GameObject.Find("Grid").GetComponent<Grid>();
 		combatManager = GameObject.Find("CombatManager").GetComponent<CombatManager>();
+
+		if(characterCanvas == null || cName == null || cShield == null || cHealth == null || cHeat == null || cPortrait == null) {
+			Debug.Log("SelectdCharacterCanvas set-up incorrectly.");
+		}
+
 		NoSelection();
 	}
 
@@ -80,7 +92,8 @@ public class InputManager : MonoBehaviour {
 						else if (!hit.transform.GetComponent<Actor>().hasActed) {
 							grid.selectedActor = hit.transform.GetComponent<Actor>();
 							currentState = InputState.Idle;
-							UpdateUI();
+							UpdateInputUI();
+							UpdateCharacterUI();
 							grid.selectedActor.Selected();
 						}
 						else {
@@ -132,7 +145,7 @@ public class InputManager : MonoBehaviour {
 						grid.selectedActor.Deselected();
 						grid.selectedActor = null;
 						currentState = InputState.NoSelection;
-						UpdateUI();
+						UpdateInputUI();
 					}
 					break;
 				case InputState.Moving:
@@ -161,7 +174,8 @@ public class InputManager : MonoBehaviour {
 		}
 
 		currentState = InputState.NoSelection;
-		UpdateUI();
+		UpdateInputUI();
+		UpdateCharacterUI();
 	}
 
 	private void Idle() {
@@ -169,7 +183,7 @@ public class InputManager : MonoBehaviour {
 			currentState = InputState.Idle;
 			ClearTargets();
 			grid.ResetMovement();
-			UpdateUI();
+			UpdateInputUI();
 		}
 	}
 
@@ -181,12 +195,12 @@ public class InputManager : MonoBehaviour {
 				if (currentState != InputState.Moving) {
 					grid.DisplayAvailableMovement(grid.selectedActor.moveDist);
 					currentState = InputState.Moving;
-					UpdateUI();
+					UpdateInputUI();
 				}
 				else {
 					grid.ResetMovement();
 					currentState = InputState.Idle;
-					UpdateUI();
+					UpdateInputUI();
 				}
 			}
 		}
@@ -200,12 +214,12 @@ public class InputManager : MonoBehaviour {
 				if (currentState != InputState.Aiming) {
 					HighlightTargets(grid.selectedActor.weapon.range);
 					currentState = InputState.Aiming;
-					UpdateUI();
+					UpdateInputUI();
 				}
 				else {
 					ClearTargets();
 					currentState = InputState.Idle;
-					UpdateUI();
+					UpdateInputUI();
 				}
 			}
 		}
@@ -220,23 +234,24 @@ public class InputManager : MonoBehaviour {
 				if (currentState != InputState.Reloading) {
 					grid.selectedActor.ReloadActive();
 					currentState = InputState.Reloading;
-					UpdateUI();
+					UpdateInputUI();
 				}
 				else {
 					grid.selectedActor.ReloadDeactive();
 					currentState = InputState.Idle;
-					UpdateUI();
+					UpdateInputUI();
 				}
 			}
 		}
 	}
 
-	private void UpdateUI() {
+	private void UpdateInputUI() {
 		switch(currentState) {
 			case InputState.NoSelection:
 				moveButton.interactable = false;
 				aimButton.interactable = false;
 				reloadButton.interactable = false;
+				UpdateCharacterUI();
 				break;
 			case InputState.Idle:
 				if (!grid.selectedActor.hasMoved) {
@@ -272,6 +287,20 @@ public class InputManager : MonoBehaviour {
 					aimButton.interactable = true;
 				}
 				break;
+		}
+	}
+
+	private void UpdateCharacterUI() {
+		if(grid.selectedActor != null) {
+			cName.text = grid.selectedActor.name;
+			cShield.text = grid.selectedActor.currentShield.ToString();
+			cHealth.text = grid.selectedActor.currentHealth.ToString();
+			cHeat.text = grid.selectedActor.weapon.currentHeat.ToString();
+			cPortrait.sprite = grid.selectedActor.characterPortrait;
+			characterCanvas.gameObject.SetActive(true);
+		}
+		else {
+			characterCanvas.gameObject.SetActive(false);
 		}
 	}
 }

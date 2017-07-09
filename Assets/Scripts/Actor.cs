@@ -4,8 +4,10 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class Actor : MonoBehaviour {
-	//___ANIMATION______________________________________________//
+	//___VISUALS________________________________________________//
 	private Animator anim;
+
+	public Sprite characterPortrait;
 
 	//___MOVEMENT_______________________________________________//
 	[HideInInspector] public int tileX, tileZ;
@@ -28,7 +30,9 @@ public class Actor : MonoBehaviour {
 	public float fireTime;
 
 	public int maxHealth;
-	private int currentHealth;
+	[HideInInspector] public int currentHealth;
+	public int maxShield;
+	[HideInInspector] public int currentShield;
 
 	//___MANAGEMENT_ ___________________________________________//
 	[HideInInspector] public bool isAwaitingOrders = false;
@@ -57,6 +61,7 @@ public class Actor : MonoBehaviour {
 		reloadIcon.SetActive(false);
 
 		currentHealth = maxHealth;
+		currentShield = maxShield;
 	}
 
 	public void ResetActions() {

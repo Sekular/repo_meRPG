@@ -10,7 +10,7 @@ public class Weapon : MonoBehaviour
 	public ParticleSystem firingPS;
     public ParticleSystem flashPS;
 
-    public int heatLimit;
+    public int maxHeat;
     [HideInInspector] public int currentHeat;
 
     public void Fire() {
