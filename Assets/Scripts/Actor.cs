@@ -48,8 +48,18 @@ public class Actor : MonoBehaviour {
 
 	[HideInInspector] public bool isTargeted;
 
+	//___HELPERS_ _____________________________________________//
+	public void SetAvailable() { availableIcon.SetActive(true); }
+	public void SetUnavailable() { availableIcon.SetActive(false); }
+	public void Selected() { selectedIcon.SetActive(true); }
+	public void ReloadActive() { reloadIcon.SetActive(true); }
+	public void ReloadDeactive() { reloadIcon.SetActive(false); }
+	public void Deselected() { selectedIcon.SetActive(false); }
+	public void Deactivate() { availableIcon.SetActive(false); selectedIcon.SetActive(false); targetedIcon.SetActive(false); reloadIcon.SetActive(false); }
 
 	void Start() {
+		SetKinematic(true);
+
 		anim = GetComponentInChildren<Animator>();
 		weapon = GetComponentInChildren<Weapon>();
 		combatManager = GameObject.Find("CombatManager").GetComponent<CombatManager>();
@@ -69,7 +79,6 @@ public class Actor : MonoBehaviour {
 		hasMoved = false;
 	}
 
-	// This is currently drawing a line on click in conjunction with MoveTile.OnMouseUp(). Use this again later for showing the movement of characters.
 	public void ShowPathTo() {
 		if (currentPath != null) {
 			int currNode = 0;
@@ -85,30 +94,8 @@ public class Actor : MonoBehaviour {
 		}
 	}
 
-	void FixedUpdate() {
-        if (isAwaitingOrders && !hasActed && !isIncap) {
-            if (combatManager.activeTeam == team) {
-                availableIcon.SetActive(true);
-            }
-            else {
-                availableIcon.SetActive(false);
-            }
-        }
-		else {
-            availableIcon.SetActive(false);
-        }
-		
-    }
-
-    public void Selected() {
-        selectedIcon.SetActive(true);
-	}
-
-    public void Deselected() {
-        selectedIcon.SetActive(false);
-    }
-
 	public void Move(int x, int z) {
+		combatManager.DeactivateTeammates(team, this);
 		isMoving = true;
 		anim.SetBool("IsMoving", true);
 		grid.GeneratePathTo(x, z);
@@ -138,7 +125,7 @@ public class Actor : MonoBehaviour {
 		anim.SetBool("IsMoving", false);
 	}
 
-	// Advances path-finding progress by one node.
+	// Advances path-finding progress by one node. Used for movement.
 	void AdvancePathing() {
 		if (currentPath == null) { return; }
 
@@ -184,43 +171,35 @@ public class Actor : MonoBehaviour {
 
         hasActed = true;
 
-        CycleActiveTeam();
-
         combatManager.StartNextTurn();
     }
-
-    void CycleActiveTeam()
-    {
-        if (combatManager.activeTeam == 2)
-        {
-            combatManager.activeTeam = 1;
-        }
-        else if (combatManager.activeTeam == 1)
-        {
-            combatManager.activeTeam = 2;
-        }
-    }
-
-	public void ReloadActive() {
-		reloadIcon.SetActive(true);
-	}
-
-	public void ReloadDeactive() {
-		reloadIcon.SetActive(false);
-	}
 
 	public void Reload() {
 		weapon.currentHeat = 0;
 		hasActed = true;
+
+		combatManager.StartNextTurn();
 	}
 
 	public void TakeDamage(int damage)
 	{
-		currentHealth -= damage;
+		currentShield -= damage;
+		Debug.Log("Shield takes " + damage + " damage.");
+
+		if(currentShield < 0) {
+			Debug.Log("Health takes " + currentShield + " damage.");
+			currentHealth += currentShield;
+			currentShield = 0;
+		}
 
 		if(currentHealth <= 0)
 		{
 			isIncap = true;
+
+			SetKinematic(false);
+			weapon.transform.parent = null;
+			GetComponentInChildren<Animator>().enabled = false;
+
 			Debug.Log(gameObject.name + " has been incapacitated.");
 
 			// TODO Play death animation.
@@ -253,5 +232,12 @@ public class Actor : MonoBehaviour {
 	public void ClearTargeted() {
 		isTargeted = false;
 		targetedIcon.SetActive(false);
+	}
+
+	void SetKinematic(bool newValue) {
+		Rigidbody[] bodies = GetComponentsInChildren<Rigidbody>();
+		foreach (Rigidbody rb in bodies) {
+			rb.isKinematic = newValue;
+		}
 	}
 }

@@ -11,8 +11,13 @@ public class CombatManager : MonoBehaviour
 
     private int roundNumber = 0;
 
+	private Grid grid;
+	private InputManager input;
+
 	void Start() {
-        SetTeams();
+		grid = GameObject.Find("Grid").GetComponent<Grid>();
+		input = GameObject.Find("Main Camera").GetComponent<InputManager>();
+		SetTeams();
         NewRound();
 	}
 	
@@ -28,8 +33,9 @@ public class CombatManager : MonoBehaviour
 
     void NewRound() {
         roundNumber++;
-        //Debug.Log("Starting Round " + roundNumber.ToString());
+		//Debug.Log("Starting Round " + roundNumber.ToString());
 
+		input.ClearTargets();
         ResetActors();
         RollInitiative();
         StartNextTurn();
@@ -57,34 +63,59 @@ public class CombatManager : MonoBehaviour
     }
 
     public void StartNextTurn() {
-        CheckGameOver();
+		grid.selectedActor = null;
+
+		foreach (Actor actor in team2) { actor.Deactivate(); }
+		foreach (Actor actor in team1) { actor.Deactivate(); }
+
+		if (activeTeam == 2) {
+			activeTeam = 1;
+		} else if (activeTeam == 1) {
+			activeTeam = 2;
+		}
+
+		CheckGameOver();
         CheckMovesAvailable();
 
         if(activeTeam == 1) {
-            //Debug.Log("NEW TURN: Team 1.");
-
-            foreach (Actor actor in team1) {
-                if (!actor.isIncap) {
-                    if (!actor.hasActed) {
-                        actor.isAwaitingOrders = true;
-                       // Debug.Log(actor.name + " awaiting orders.");
-                    }
-                }
-            }
-        }
+			foreach (Actor actor in team1) {
+				if (!actor.isIncap) {
+					if (!actor.hasActed) {
+						actor.SetAvailable();
+					}
+				}
+			}
+		}
         else if(activeTeam == 2) {
-            //Debug.Log("NEW TURN: Team 2.");
-
             foreach (Actor actor in team2) {
                 if (!actor.isIncap) {
                     if (!actor.hasActed) {
-                        actor.isAwaitingOrders = true;
-                        //Debug.Log(actor.name + " awaiting orders.");
-                    }
+						actor.SetAvailable();
+					}
                 }
             }
         }
     }
+
+	public void DeactivateTeammates(int team, Actor currentActor) {
+		if(team == 1) {
+			foreach (Actor actor in team1) {
+				if(actor != currentActor) {
+					actor.Deactivate();
+				}
+			}
+		}
+		else if(team == 2) {
+			foreach (Actor actor in team2) {
+				if (actor != currentActor) {
+					actor.Deactivate();
+				}
+			}
+		}
+		else {
+			Debug.Log("No valid team received!");
+		}
+	}
 
     void CheckMovesAvailable() {
         if (activeTeam == 1) {

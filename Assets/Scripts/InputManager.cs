@@ -50,7 +50,7 @@ public class InputManager : MonoBehaviour {
 		targets.Clear();
 
 		foreach (Actor actor in combatManager.team1) {
-			if (actor.team != grid.selectedActor.team) {
+			if (actor.team != grid.selectedActor.team && !actor.isIncap) {
 				if ((Vector3.Distance(grid.selectedActor.transform.position, actor.transform.position)) < range) {
 					targets.Add(actor);
 				}
@@ -58,7 +58,7 @@ public class InputManager : MonoBehaviour {
 		}
 
 		foreach (Actor actor in combatManager.team2) {
-			if (actor.team != grid.selectedActor.team) {
+			if (actor.team != grid.selectedActor.team && !actor.isIncap) {
 				if ((Vector3.Distance(grid.selectedActor.transform.position, actor.transform.position)) < range) {
 					targets.Add(actor);
 				}
@@ -70,7 +70,7 @@ public class InputManager : MonoBehaviour {
 		}
 	}
 
-	void ClearTargets() {
+	public void ClearTargets() {
 		foreach (Actor target in targets) {
 			target.ClearTargeted();
 		}
@@ -85,8 +85,13 @@ public class InputManager : MonoBehaviour {
 				if (hit.transform.GetComponent<Actor>()) {
 					if (hit.transform.GetComponent<Actor>().team == combatManager.activeTeam) {
 						if(grid.selectedActor != null) {
-							if (hit.transform.name == grid.selectedActor.name) {
-								NoSelection();
+							if (hit.transform.name == grid.selectedActor.name && currentState == InputState.Idle) {
+								if(grid.selectedActor.hasMoved || grid.selectedActor.hasActed) {
+									return;
+								}
+								else {
+									NoSelection();
+								}
 							}
 						}
 						else if (!hit.transform.GetComponent<Actor>().hasActed) {
@@ -141,7 +146,7 @@ public class InputManager : MonoBehaviour {
 				case InputState.NoSelection:
 					break;
 				case InputState.Idle:
-					if (grid.selectedActor) {
+					if (grid.selectedActor && !grid.selectedActor.hasActed && !grid.selectedActor.hasMoved) {
 						grid.selectedActor.Deselected();
 						grid.selectedActor = null;
 						currentState = InputState.NoSelection;
@@ -170,6 +175,7 @@ public class InputManager : MonoBehaviour {
 	private void NoSelection() {
 		if (grid.selectedActor) {
 			grid.selectedActor.Deselected();
+			ClearTargets();
 			grid.selectedActor = null;
 		}
 

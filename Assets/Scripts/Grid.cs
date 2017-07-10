@@ -222,7 +222,7 @@ public class Grid : MonoBehaviour {
 		List<Node> nodesToCheck = new List<Node>();
 		List<Node> nodesToHighlight = new List<Node>();
 		nodesToCheck.Add(graph[(int)selectedActor.transform.position.x, (int)selectedActor.transform.position.z]);
-		nodesToHighlight.Add(graph[(int)selectedActor.transform.position.x, (int)selectedActor.transform.position.z]);
+		//nodesToHighlight.Add(graph[(int)selectedActor.transform.position.x, (int)selectedActor.transform.position.z]);
 
 		graph[(int)selectedActor.transform.position.x, (int)selectedActor.transform.position.z].isHighlighted = true;
 
