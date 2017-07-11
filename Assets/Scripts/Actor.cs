@@ -1,12 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class Actor : MonoBehaviour {
 	//___VISUALS________________________________________________//
 	private Animator anim;
-
 	public Sprite characterPortrait;
 
 	//___MOVEMENT_______________________________________________//
@@ -48,6 +46,9 @@ public class Actor : MonoBehaviour {
 
 	[HideInInspector] public bool isTargeted;
 
+	Vector3 targetDir = Vector3.zero;
+
+
 	//___HELPERS_ _____________________________________________//
 	public void SetAvailable() { availableIcon.SetActive(true); }
 	public void SetUnavailable() { availableIcon.SetActive(false); }
@@ -67,6 +68,14 @@ public class Actor : MonoBehaviour {
 		currentHealth = maxHealth;
 		currentShield = maxShield;
 	}
+
+	void Update() {
+		Debug.DrawLine(transform.position, (transform.position + targetDir), Color.red);
+		Debug.DrawLine(weapon.transform.position, (weapon.transform.position + weapon.transform.forward), Color.blue);
+	}
+
+	//Vector3 actorForward = (transform.position + (transform.position + -transform.forward));
+	//Vector3 weaponForward = (weapon.transform.position + (weapon.transform.position + weapon.transform.forward));
 
 	public void ResetActions() {
 		hasActed = false;
@@ -102,7 +111,7 @@ public class Actor : MonoBehaviour {
 	}
 
 	IEnumerator MoveCR() {
-		AimAt(grid.TileToWorld(tileX, tileZ));
+		MoveAt(grid.TileToWorld(tileX, tileZ));
 
 		while (isMoving) {
 			if (Vector3.Distance(transform.position, grid.TileToWorld(tileX, tileZ)) < 0.01f) {
@@ -141,7 +150,7 @@ public class Actor : MonoBehaviour {
 		tileZ = currentPath[1].z;
 		moveStep = 0f;
 		lerpStart = transform.position;
-		AimAt(grid.TileToWorld(tileX, tileZ));
+		MoveAt(grid.TileToWorld(tileX, tileZ));
 
 		// Remove the old "current" tile from the path-finding list
 		currentPath.RemoveAt(0);
@@ -207,11 +216,11 @@ public class Actor : MonoBehaviour {
 		}
 	}
 
-	public void AimAt(Vector3 target) {
-		StartCoroutine(AimAtCR(target));
+	public void MoveAt(Vector3 target) {
+		StartCoroutine(MoveAtCR(target));
 	}
 
-	public IEnumerator AimAtCR(Vector3 target) {
+	public IEnumerator MoveAtCR(Vector3 target) {
 		float aimStep = 0;
 
 		while(aimStep < 1f) {
@@ -220,6 +229,25 @@ public class Actor : MonoBehaviour {
 
 			Vector3 newDir = Vector3.RotateTowards(transform.forward, -targetDir, aimStep, 0.0F);
 			
+			transform.rotation = Quaternion.LookRotation(newDir);
+			yield return null;
+		}
+	}
+
+	public void AimAt(Vector3 target) {
+		StartCoroutine(AimAtCR(target));
+	}
+
+	public IEnumerator AimAtCR(Vector3 target) {
+		float aimStep = 0;
+		
+		while (aimStep < 1f) {
+			targetDir = (target - transform.position);
+
+			aimStep += Time.deltaTime * aimSpeed;
+
+			Vector3 newDir = Vector3.Slerp(transform.forward, -targetDir, aimStep);
+
 			transform.rotation = Quaternion.LookRotation(newDir);
 			yield return null;
 		}
