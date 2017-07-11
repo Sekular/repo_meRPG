@@ -57,18 +57,12 @@ public class Actor : MonoBehaviour {
 	public void Deselected() { selectedIcon.SetActive(false); }
 	public void Deactivate() { availableIcon.SetActive(false); selectedIcon.SetActive(false); targetedIcon.SetActive(false); reloadIcon.SetActive(false); }
 
-	void Start() {
+	void Awake() {
 		SetKinematic(true);
-
 		anim = GetComponentInChildren<Animator>();
 		weapon = GetComponentInChildren<Weapon>();
 		combatManager = GameObject.Find("CombatManager").GetComponent<CombatManager>();
 		grid = GameObject.Find("Grid").GetComponent<Grid>();
-		
-		availableIcon.SetActive(false);
-		selectedIcon.SetActive(false);
-		targetedIcon.SetActive(false);
-		reloadIcon.SetActive(false);
 
 		currentHealth = maxHealth;
 		currentShield = maxShield;
@@ -153,19 +147,19 @@ public class Actor : MonoBehaviour {
 		currentPath.RemoveAt(0);
 	}
 
-	public void Attack(Actor target)
+	public void Attack(Actor target, Actor attacker)
     {
-        StartCoroutine(AttackCR(target));
+        StartCoroutine(AttackCR(target, attacker));
     }
 
-    public IEnumerator AttackCR(Actor target)
+    public IEnumerator AttackCR(Actor target, Actor attacker)
     {
 		AimAt(target.transform.position);
 
 		anim.SetBool("IsAiming", true);
         yield return new WaitForSeconds(aimDelay);
         weapon.Fire();
-		target.TakeDamage(weapon.damage);
+		target.TakeDamage(weapon.damage, attacker);
 		yield return new WaitForSeconds(fireTime);
         anim.SetBool("IsAiming", false);
 
@@ -181,7 +175,7 @@ public class Actor : MonoBehaviour {
 		combatManager.StartNextTurn();
 	}
 
-	public void TakeDamage(int damage)
+	public void TakeDamage(int damage, Actor attacker)
 	{
 		currentShield -= damage;
 		Debug.Log("Shield takes " + damage + " damage.");
@@ -199,6 +193,13 @@ public class Actor : MonoBehaviour {
 			SetKinematic(false);
 			weapon.transform.parent = null;
 			GetComponentInChildren<Animator>().enabled = false;
+
+			Rigidbody[] rigidBodies = GetComponentsInChildren<Rigidbody>();
+
+			Vector3 hitVector = (transform.position - attacker.transform.position);
+
+
+			rigidBodies[0].AddForce(hitVector.x * 10f, hitVector.y * 10f, hitVector.z * 10f, ForceMode.Impulse);
 
 			Debug.Log(gameObject.name + " has been incapacitated.");
 

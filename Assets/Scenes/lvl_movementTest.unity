@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -2339,59 +2339,19 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 114217746099552420, guid: 297f064f7937c404daf0ae8b2f12c40c,
-        type: 2}
-      propertyPath: damage
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 114217746099552420, guid: 297f064f7937c404daf0ae8b2f12c40c,
-        type: 2}
-      propertyPath: maxHeat
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 1913273110458790, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
       propertyPath: m_Name
       value: AllianceMarine_02
       objectReference: {fileID: 0}
-    - target: {fileID: 144660415786190282, guid: 297f064f7937c404daf0ae8b2f12c40c,
-        type: 2}
-      propertyPath: m_ConnectedAnchor.x
-      value: 0.11060206
-      objectReference: {fileID: 0}
     - target: {fileID: 144346554818389280, guid: 297f064f7937c404daf0ae8b2f12c40c,
         type: 2}
-      propertyPath: m_ConnectedAnchor.x
-      value: -0.1106021
-      objectReference: {fileID: 0}
-    - target: {fileID: 144651664174367506, guid: 297f064f7937c404daf0ae8b2f12c40c,
-        type: 2}
-      propertyPath: m_ConnectedAnchor.x
-      value: -0.0000000058937397
-      objectReference: {fileID: 0}
-    - target: {fileID: 144524181874719442, guid: 297f064f7937c404daf0ae8b2f12c40c,
-        type: 2}
-      propertyPath: m_ConnectedAnchor.x
-      value: 0.030300295
-      objectReference: {fileID: 0}
-    - target: {fileID: 144524181874719442, guid: 297f064f7937c404daf0ae8b2f12c40c,
-        type: 2}
       propertyPath: m_ConnectedAnchor.z
-      value: -0.0117158
+      value: 0.026997302
       objectReference: {fileID: 0}
     - target: {fileID: 144577137604657140, guid: 297f064f7937c404daf0ae8b2f12c40c,
         type: 2}
       propertyPath: m_ConnectedAnchor.x
       value: -0.00000022834863
-      objectReference: {fileID: 0}
-    - target: {fileID: 144577137604657140, guid: 297f064f7937c404daf0ae8b2f12c40c,
-        type: 2}
-      propertyPath: m_ConnectedAnchor.z
-      value: -0.0000014696267
-      objectReference: {fileID: 0}
-    - target: {fileID: 144540930552838264, guid: 297f064f7937c404daf0ae8b2f12c40c,
-        type: 2}
-      propertyPath: m_ConnectedAnchor.x
-      value: -0.18849528
       objectReference: {fileID: 0}
     - target: {fileID: 144566489287913532, guid: 297f064f7937c404daf0ae8b2f12c40c,
         type: 2}
@@ -2400,18 +2360,13 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 144566489287913532, guid: 297f064f7937c404daf0ae8b2f12c40c,
         type: 2}
-      propertyPath: m_ConnectedAnchor.y
-      value: 0.28899962
-      objectReference: {fileID: 0}
-    - target: {fileID: 144566489287913532, guid: 297f064f7937c404daf0ae8b2f12c40c,
-        type: 2}
       propertyPath: m_ConnectedAnchor.z
       value: -0.000005856155
       objectReference: {fileID: 0}
-    - target: {fileID: 144346554818389280, guid: 297f064f7937c404daf0ae8b2f12c40c,
+    - target: {fileID: 144524181874719442, guid: 297f064f7937c404daf0ae8b2f12c40c,
         type: 2}
       propertyPath: m_ConnectedAnchor.z
-      value: 0.026997302
+      value: -0.0117158
       objectReference: {fileID: 0}
     - target: {fileID: 144700064676952140, guid: 297f064f7937c404daf0ae8b2f12c40c,
         type: 2}

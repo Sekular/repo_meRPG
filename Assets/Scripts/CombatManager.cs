@@ -14,10 +14,13 @@ public class CombatManager : MonoBehaviour
 	private Grid grid;
 	private InputManager input;
 
-	void Start() {
+	void Awake() {
 		grid = GameObject.Find("Grid").GetComponent<Grid>();
 		input = GameObject.Find("Main Camera").GetComponent<InputManager>();
 		SetTeams();
+	}
+
+	void Start() {
         NewRound();
 	}
 	
@@ -82,6 +85,7 @@ public class CombatManager : MonoBehaviour
 				if (!actor.isIncap) {
 					if (!actor.hasActed) {
 						actor.SetAvailable();
+						Debug.Log(actor.name + " is available.");
 					}
 				}
 			}
