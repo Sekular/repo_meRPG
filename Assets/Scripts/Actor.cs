@@ -47,6 +47,10 @@ public class Actor : MonoBehaviour {
 	[HideInInspector] public bool isTargeted;
 
 	Vector3 targetDir = Vector3.zero;
+	Vector3 weaponDir = Vector3.zero;
+	Vector3 finalFacing = Vector3.zero;
+	Vector3 a, b, c;
+	Vector3 newDir = Vector3.zero;
 
 
 	//___HELPERS_ _____________________________________________//
@@ -70,12 +74,11 @@ public class Actor : MonoBehaviour {
 	}
 
 	void Update() {
-		Debug.DrawLine(transform.position, (transform.position + targetDir), Color.red);
-		Debug.DrawLine(weapon.transform.position, (weapon.transform.position + weapon.transform.forward), Color.blue);
+		Debug.DrawLine(transform.position, a, Color.red);
+		Debug.DrawLine(transform.position, b, Color.blue);
+		Debug.DrawLine(transform.position, finalFacing, Color.green);
+		Debug.DrawLine(transform.position, -transform.forward + transform.position, Color.yellow);
 	}
-
-	//Vector3 actorForward = (transform.position + (transform.position + -transform.forward));
-	//Vector3 weaponForward = (weapon.transform.position + (weapon.transform.position + weapon.transform.forward));
 
 	public void ResetActions() {
 		hasActed = false;
@@ -240,14 +243,30 @@ public class Actor : MonoBehaviour {
 
 	public IEnumerator AimAtCR(Vector3 target) {
 		float aimStep = 0;
-		
+
 		while (aimStep < 1f) {
 			targetDir = (target - transform.position);
-
+		
 			aimStep += Time.deltaTime * aimSpeed;
 
-			Vector3 newDir = Vector3.Slerp(transform.forward, -targetDir, aimStep);
+			newDir = Vector3.Lerp(transform.forward, -targetDir, aimStep);
+			transform.rotation = Quaternion.LookRotation(newDir);
+			yield return null;
+		}
 
+		targetDir = (target - transform.position);
+		a = transform.position + targetDir;
+		a.y = 0f;
+		b = (weapon.transform.forward * targetDir.magnitude) + transform.position;
+		b.y = 0f;
+		c = a - b;
+		finalFacing = a + c;
+		aimStep = 0f;
+
+		while (aimStep < 1f) {
+			aimStep += Time.deltaTime * aimSpeed;
+
+			newDir = Vector3.Lerp(transform.forward, finalFacing, aimStep);
 			transform.rotation = Quaternion.LookRotation(newDir);
 			yield return null;
 		}

@@ -350,7 +350,7 @@ Prefab:
     - target: {fileID: 114283892121453188, guid: 297f064f7937c404daf0ae8b2f12c40c,
         type: 2}
       propertyPath: aimDelay
-      value: 0.5
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 144566489287913532, guid: 297f064f7937c404daf0ae8b2f12c40c,
         type: 2}
@@ -426,6 +426,11 @@ Prefab:
         type: 2}
       propertyPath: m_ConnectedAnchor.x
       value: -0.18849564
+      objectReference: {fileID: 0}
+    - target: {fileID: 114283892121453188, guid: 297f064f7937c404daf0ae8b2f12c40c,
+        type: 2}
+      propertyPath: aimSpeed
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
@@ -1337,7 +1342,7 @@ Prefab:
     - target: {fileID: 114577676615893994, guid: e17e70158bf02584683a5ac01c630105,
         type: 2}
       propertyPath: aimDelay
-      value: 0.5
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 144406095613524132, guid: e17e70158bf02584683a5ac01c630105,
         type: 2}
@@ -1388,6 +1393,11 @@ Prefab:
         type: 2}
       propertyPath: m_ConnectedAnchor.z
       value: 0.21645793
+      objectReference: {fileID: 0}
+    - target: {fileID: 114577676615893994, guid: e17e70158bf02584683a5ac01c630105,
+        type: 2}
+      propertyPath: aimSpeed
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e17e70158bf02584683a5ac01c630105, type: 2}
@@ -1990,6 +2000,16 @@ Prefab:
       propertyPath: m_Name
       value: AllianceMarine_01
       objectReference: {fileID: 0}
+    - target: {fileID: 114283892121453188, guid: 297f064f7937c404daf0ae8b2f12c40c,
+        type: 2}
+      propertyPath: aimDelay
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114283892121453188, guid: 297f064f7937c404daf0ae8b2f12c40c,
+        type: 2}
+      propertyPath: aimSpeed
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
   m_IsPrefabParent: 0
@@ -2357,6 +2377,16 @@ Prefab:
       propertyPath: m_Name
       value: CerberusTrooper_01
       objectReference: {fileID: 0}
+    - target: {fileID: 114577676615893994, guid: e17e70158bf02584683a5ac01c630105,
+        type: 2}
+      propertyPath: aimDelay
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114577676615893994, guid: e17e70158bf02584683a5ac01c630105,
+        type: 2}
+      propertyPath: aimSpeed
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e17e70158bf02584683a5ac01c630105, type: 2}
   m_IsPrefabParent: 0
@@ -2481,7 +2511,7 @@ Prefab:
     - target: {fileID: 114283892121453188, guid: 297f064f7937c404daf0ae8b2f12c40c,
         type: 2}
       propertyPath: aimDelay
-      value: 0.5
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 144660415786190282, guid: 297f064f7937c404daf0ae8b2f12c40c,
         type: 2}
@@ -2497,6 +2527,11 @@ Prefab:
         type: 2}
       propertyPath: m_ConnectedAnchor.z
       value: 0.2164583
+      objectReference: {fileID: 0}
+    - target: {fileID: 114283892121453188, guid: 297f064f7937c404daf0ae8b2f12c40c,
+        type: 2}
+      propertyPath: aimSpeed
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
