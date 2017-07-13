@@ -13,6 +13,7 @@ public class Actor : MonoBehaviour {
 	[HideInInspector] public List<Node> currentPath = null;
 	private Vector3 lerpStart;
 	float moveStep = 0;
+	public float rotateSpeed;
 
 	[HideInInspector] public bool isMoving;
 
@@ -77,7 +78,7 @@ public class Actor : MonoBehaviour {
 		Debug.DrawLine(transform.position, a, Color.red);
 		Debug.DrawLine(transform.position, b, Color.blue);
 		Debug.DrawLine(transform.position, finalFacing, Color.green);
-		Debug.DrawLine(transform.position, -transform.forward + transform.position, Color.yellow);
+		Debug.DrawLine(transform.position, transform.forward + transform.position, Color.yellow);
 	}
 
 	public void ResetActions() {
@@ -171,9 +172,9 @@ public class Actor : MonoBehaviour {
 		anim.SetBool("IsAiming", true);
         yield return new WaitForSeconds(aimDelay);
         weapon.Fire();
-		target.TakeDamage(weapon.damage, attacker);
 		yield return new WaitForSeconds(fireTime);
         anim.SetBool("IsAiming", false);
+		target.TakeDamage(weapon.damage, attacker);
 
         hasActed = true;
 
@@ -190,10 +191,8 @@ public class Actor : MonoBehaviour {
 	public void TakeDamage(int damage, Actor attacker)
 	{
 		currentShield -= damage;
-		Debug.Log("Shield takes " + damage + " damage.");
 
 		if(currentShield < 0) {
-			Debug.Log("Health takes " + currentShield + " damage.");
 			currentHealth += currentShield;
 			currentShield = 0;
 		}
@@ -228,9 +227,9 @@ public class Actor : MonoBehaviour {
 
 		while(aimStep < 1f) {
 			Vector3 targetDir = target - transform.position;
-			aimStep += Time.deltaTime * aimSpeed;
+			aimStep += Time.deltaTime * rotateSpeed;
 
-			Vector3 newDir = Vector3.RotateTowards(transform.forward, -targetDir, aimStep, 0.0F);
+			Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, aimStep, 0.0F);
 			
 			transform.rotation = Quaternion.LookRotation(newDir);
 			yield return null;
@@ -246,15 +245,14 @@ public class Actor : MonoBehaviour {
 
 		while (aimStep < 1f) {
 			targetDir = (target - transform.position);
-		
+
 			aimStep += Time.deltaTime * aimSpeed;
 
-			newDir = Vector3.Lerp(transform.forward, -targetDir, aimStep);
+			newDir = Vector3.Lerp(transform.forward, targetDir, aimStep);
 			transform.rotation = Quaternion.LookRotation(newDir);
 			yield return null;
 		}
 
-		targetDir = (target - transform.position);
 		a = transform.position + targetDir;
 		a.y = 0f;
 		b = (weapon.transform.forward * targetDir.magnitude) + transform.position;
@@ -263,13 +261,18 @@ public class Actor : MonoBehaviour {
 		finalFacing = a + c;
 		aimStep = 0f;
 
-		while (aimStep < 1f) {
-			aimStep += Time.deltaTime * aimSpeed;
+		transform.LookAt(finalFacing);
 
-			newDir = Vector3.Lerp(transform.forward, finalFacing, aimStep);
-			transform.rotation = Quaternion.LookRotation(newDir);
-			yield return null;
-		}
+		/*targetDir = (target - transform.position);
+		a = transform.position + targetDir;
+		a.y = 0f;
+		b = (weapon.transform.forward * targetDir.magnitude) + transform.position;
+		b.y = 0f;
+		c = a - b;
+		finalFacing = a + c;
+		aimStep = 0f;
+
+		transform.LookAt(finalFacing);*/
 	}
 
 	public void SetTargeted() {

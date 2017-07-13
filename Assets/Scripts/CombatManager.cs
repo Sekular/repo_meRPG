@@ -85,7 +85,6 @@ public class CombatManager : MonoBehaviour
 				if (!actor.isIncap) {
 					if (!actor.hasActed) {
 						actor.SetAvailable();
-						Debug.Log(actor.name + " is available.");
 					}
 				}
 			}
