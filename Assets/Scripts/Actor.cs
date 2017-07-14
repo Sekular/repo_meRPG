@@ -33,6 +33,8 @@ public class Actor : MonoBehaviour {
 	public int maxShield;
 	[HideInInspector] public int currentShield;
 
+	private Shield shieldVisual;
+
 	//___MANAGEMENT_ ___________________________________________//
 	[HideInInspector] public bool isAwaitingOrders = false;
 	[HideInInspector] public bool hasActed = false;
@@ -69,16 +71,18 @@ public class Actor : MonoBehaviour {
 		weapon = GetComponentInChildren<Weapon>();
 		combatManager = GameObject.Find("CombatManager").GetComponent<CombatManager>();
 		grid = GameObject.Find("Grid").GetComponent<Grid>();
+		shieldVisual = GetComponent<Shield>();
 
 		currentHealth = maxHealth;
 		currentShield = maxShield;
 	}
 
 	void Update() {
-		Debug.DrawLine(transform.position, a, Color.red);
+		// Used to visualize actor targeting for debug purposes.
+		/*Debug.DrawLine(transform.position, a, Color.red);
 		Debug.DrawLine(transform.position, b, Color.blue);
 		Debug.DrawLine(transform.position, finalFacing, Color.green);
-		Debug.DrawLine(transform.position, transform.forward + transform.position, Color.yellow);
+		Debug.DrawLine(transform.position, transform.forward + transform.position, Color.yellow);*/
 	}
 
 	public void ResetActions() {
@@ -190,12 +194,20 @@ public class Actor : MonoBehaviour {
 
 	public void TakeDamage(int damage, Actor attacker)
 	{
-		currentShield -= damage;
+		if(currentShield > 0) {
+			shieldVisual.ShieldHit();
+			currentShield -= damage;
+			if (currentShield < 0) {
+				shieldVisual.ShieldBroken();
+				currentHealth += currentShield;
 
-		if(currentShield < 0) {
-			currentHealth += currentShield;
-			currentShield = 0;
+				currentShield = 0;
+			}
 		}
+		else {
+			currentHealth -= damage;
+		}
+		
 
 		if(currentHealth <= 0)
 		{
