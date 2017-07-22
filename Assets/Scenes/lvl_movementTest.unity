@@ -1466,21 +1466,25 @@ MonoBehaviour:
     tileObject: {fileID: 1128420558970852, guid: baa695ae5422f5640abe02df5527b233,
       type: 2}
     moveCost: 1
+    coverRating: 0
     isWalkable: 1
   - name: Difficult
     tileObject: {fileID: 1919374651060382, guid: b4aa051e109365b4092b848c538a5fcb,
       type: 2}
     moveCost: 2
+    coverRating: 0
     isWalkable: 1
   - name: FullCover
     tileObject: {fileID: 1465419179668340, guid: f1afde229160fb44599364496cf7a616,
       type: 2}
     moveCost: 1
+    coverRating: 2
     isWalkable: 0
   - name: HalfCover
     tileObject: {fileID: 1919374651060382, guid: 18a52ea3223217a4dae6dc205900e357,
       type: 2}
     moveCost: 1
+    coverRating: 1
     isWalkable: 0
   moveVisual: {fileID: 114556578597888960, guid: 34d43c70ebb986b439c2746f9bd47643,
     type: 2}

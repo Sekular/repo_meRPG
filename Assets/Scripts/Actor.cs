@@ -133,6 +133,8 @@ public class Actor : MonoBehaviour {
 			yield return null;
 		}
 
+		Debug.Log(GetCover());
+
 		anim.SetBool("IsMoving", false);
 	}
 
@@ -295,6 +297,17 @@ public class Actor : MonoBehaviour {
 	public void ClearTargeted() {
 		isTargeted = false;
 		targetedIcon.SetActive(false);
+	}
+
+	public Vector4 GetCover() {
+		Vector4 cover = new Vector4 (0,0,0,0);
+
+		cover.x = grid.graph[tileX, tileZ].covNorth;
+		cover.y = grid.graph[tileX, tileZ].covEast;
+		cover.z = grid.graph[tileX, tileZ].covSouth;
+		cover.w = grid.graph[tileX, tileZ].covWest;
+
+		return (cover);
 	}
 
 	void SetKinematic(bool newValue) {

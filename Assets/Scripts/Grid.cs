@@ -12,7 +12,7 @@ public class Grid : MonoBehaviour {
 	// TODO TileType change from an Array to an Enum.
 	public TileType[] tileTypes; // Array of TileTypes that information on how the tile effects movement and what visual to display for the respective tile. Visual.
 
-	Node[,] graph; // Array of Nodes that contain references to their neighbours. Non-visual.
+	public Node[,] graph; // Array of Nodes that contain references to their neighbours. Non-visual.
 	public NodeVisual moveVisual;
 
 	// Converts tile values into world position.
@@ -113,6 +113,7 @@ public class Grid : MonoBehaviour {
 				// Find 3 left neighbours
 				if (x > 0) {
 					graph[x, z].neighbours.Add(graph[x - 1, z]);
+					graph[x, z].covWest = tileTypes[tiles[x - 1, z]].coverRating;
 					if (z > 0) { graph[x, z].neighbours.Add(graph[x - 1, z - 1]); }
 					if (z < mapSizeZ - 1) { graph[x, z].neighbours.Add(graph[x - 1, z + 1]); }
 				}
@@ -120,13 +121,20 @@ public class Grid : MonoBehaviour {
 				// Find 3 right neighbours
 				if (x < mapSizeX - 1) {
 					graph[x, z].neighbours.Add(graph[x + 1, z]);
+					graph[x, z].covEast = tileTypes[tiles[x + 1, z]].coverRating;
 					if (z > 0) { graph[x, z].neighbours.Add(graph[x + 1, z - 1]); }
 					if (z < mapSizeZ - 1) { graph[x, z].neighbours.Add(graph[x + 1, z + 1]); }
 				}
 
 				// Find up and down.
-				if (z > 0) { graph[x, z].neighbours.Add(graph[x, z - 1]); }
-				if (z < mapSizeZ - 1){ graph[x, z].neighbours.Add(graph[x, z + 1]);	}
+				if (z > 0) {
+					graph[x, z].neighbours.Add(graph[x, z - 1]);
+					graph[x, z].covSouth = tileTypes[tiles[x, z - 1]].coverRating;
+				}
+				if (z < mapSizeZ - 1) {
+					graph[x, z].neighbours.Add(graph[x, z + 1]);
+					graph[x, z].covNorth = tileTypes[tiles[x, z + 1]].coverRating;
+				}
 			}
 		}
 	}

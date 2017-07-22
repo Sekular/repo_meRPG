@@ -7,9 +7,9 @@ public class Node {
 	public List<Node> neighbours;
 	public int x, z;
 	public NodeVisual visual;
-
 	public float movesRemaining;
 	public bool isHighlighted;
+	[HideInInspector] public int covNorth = 0, covEast = 0, covSouth = 0, covWest = 0;
 
 	// Constructor
 	public Node() {
