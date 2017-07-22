@@ -45,6 +45,18 @@ public class Grid : MonoBehaviour {
 			}
 		}
 
+		tiles[1, 3] = 3;
+		tiles[1, 4] = 3;
+		tiles[1, 5] = 3;
+		tiles[1, 6] = 3;
+		tiles[1, 7] = 3;
+
+		tiles[4, 1] = 3;
+		tiles[5, 1] = 3;
+		tiles[6, 1] = 3;
+		tiles[7, 1] = 3;
+		tiles[8, 1] = 3;
+
 		// Impassable area
 		tiles[4, 4] = 2;
 		tiles[5, 4] = 2;

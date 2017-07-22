@@ -972,10 +972,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f687094e90196ec419eb5edfb26042a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panSpeed: 7.5
+  keyPanSpeed: 7.5
+  mousePanSpeed: 20
   zoomSpeed: 15
   zoomStep: 100
   rotateSpeed: 1
+  dragSpeed: 2
+  cameraDragging: 0
+  outerLeft: -10
+  outerRight: 10
 --- !u!1 &717192414
 GameObject:
   m_ObjectHideFlags: 0
@@ -1467,8 +1472,13 @@ MonoBehaviour:
       type: 2}
     moveCost: 2
     isWalkable: 1
-  - name: Impassable
+  - name: FullCover
     tileObject: {fileID: 1465419179668340, guid: f1afde229160fb44599364496cf7a616,
+      type: 2}
+    moveCost: 1
+    isWalkable: 0
+  - name: HalfCover
+    tileObject: {fileID: 1919374651060382, guid: 18a52ea3223217a4dae6dc205900e357,
       type: 2}
     moveCost: 1
     isWalkable: 0
