@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Actor : MonoBehaviour {
 	//___VISUALS________________________________________________//
@@ -46,6 +47,12 @@ public class Actor : MonoBehaviour {
 	public GameObject selectedIcon;
 	public GameObject targetedIcon;
 	public GameObject reloadIcon;
+	public Image coverIcon;
+	public Sprite noCoverIcon;
+	public Sprite halfCoverIcon;
+	public Sprite fullCoverIcon;
+	public Color coverColor;
+	public Color flankedColor;
 
 	[HideInInspector] public bool isTargeted;
 
@@ -73,16 +80,15 @@ public class Actor : MonoBehaviour {
 		grid = GameObject.Find("Grid").GetComponent<Grid>();
 		shieldVisual = GetComponent<Shield>();
 
+		tileX = (int)transform.position.x;
+		tileZ = (int)transform.position.z;
+
 		currentHealth = maxHealth;
 		currentShield = maxShield;
 	}
 
 	void Update() {
-		// Used to visualize actor targeting for debug purposes.
-		/*Debug.DrawLine(transform.position, a, Color.red);
-		Debug.DrawLine(transform.position, b, Color.blue);
-		Debug.DrawLine(transform.position, finalFacing, Color.green);
-		Debug.DrawLine(transform.position, transform.forward + transform.position, Color.yellow);*/
+		UpdateCover();
 	}
 
 	public void ResetActions() {
@@ -132,8 +138,6 @@ public class Actor : MonoBehaviour {
 			transform.position = Vector3.Lerp(lerpStart, grid.TileToWorld(tileX, tileZ), moveStep);
 			yield return null;
 		}
-
-		Debug.Log(GetCover());
 
 		anim.SetBool("IsMoving", false);
 	}
@@ -214,6 +218,7 @@ public class Actor : MonoBehaviour {
 		if(currentHealth <= 0)
 		{
 			isIncap = true;
+			GetComponentInChildren<ActorStats>().Deactivate();
 
 			SetKinematic(false);
 			weapon.transform.parent = null;
@@ -299,15 +304,107 @@ public class Actor : MonoBehaviour {
 		targetedIcon.SetActive(false);
 	}
 
-	public Vector4 GetCover() {
-		Vector4 cover = new Vector4 (0,0,0,0);
+	public void UpdateCover() {
+		if (grid.graph[tileX, tileZ].covNorth == 2 ||
+			grid.graph[tileX, tileZ].covEast  == 2 ||
+			grid.graph[tileX, tileZ].covSouth == 2 ||
+			grid.graph[tileX, tileZ].covWest  == 2)
+			{
+				coverIcon.sprite = fullCoverIcon;
+			}
+		else if (grid.graph[tileX, tileZ].covNorth == 1 ||
+				 grid.graph[tileX, tileZ].covEast  == 1 ||
+				 grid.graph[tileX, tileZ].covSouth == 1 ||
+				 grid.graph[tileX, tileZ].covWest  == 1)
+				 {
+				 coverIcon.sprite = halfCoverIcon;
+			}
+		else
+		{
+			coverIcon.sprite = noCoverIcon;
+		}
 
-		cover.x = grid.graph[tileX, tileZ].covNorth;
-		cover.y = grid.graph[tileX, tileZ].covEast;
-		cover.z = grid.graph[tileX, tileZ].covSouth;
-		cover.w = grid.graph[tileX, tileZ].covWest;
+		if (CheckFlanked()) {
+			coverIcon.color = flankedColor;
+		}
+		else {
+			coverIcon.color = coverColor;
+		}
 
-		return (cover);
+	}
+
+	bool CheckFlanked() {
+		foreach (Actor actor in combatManager.team1) {
+			if (actor.team != team && !actor.isIncap) {
+				RaycastHit hit;
+				Vector3 offset = new Vector3(0f, 1.6f, 0f);
+				Vector3 checkDir = (actor.transform.position + offset) - (transform.position + offset);
+				if (Physics.Raycast(transform.position + offset, checkDir, out hit, actor.weapon.range)) {
+					if(hit.collider.name == actor.name) {
+						if (CheckCoverValues(checkDir) >= 2) { return true; }
+						else { return false; }
+					}
+				}
+			}
+		}
+
+		foreach (Actor actor in combatManager.team2) {
+			if (actor.team != team && !actor.isIncap) {
+				RaycastHit hit;
+				Vector3 offset = new Vector3(0f, 1.6f, 0f);
+				Vector3 checkDir = (actor.transform.position + offset) - (transform.position + offset);
+				if (Physics.Raycast(transform.position + offset, checkDir, out hit, actor.weapon.range)) {
+					if (hit.collider.name == actor.name) {
+						if (CheckCoverValues(checkDir) >= 2) { return true; }
+						else { return false; }
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	int CheckCoverValues(Vector3 checkDir) {
+		int c = 0;
+
+		checkDir.x = (int)checkDir.x;
+		checkDir.y = (int)checkDir.y;
+		checkDir.z = (int)checkDir.z;
+
+		Debug.Log(checkDir);
+
+		if (checkDir.z > 0f) {
+			if (grid.graph[tileX, tileZ].covNorth == 0) { c++; }
+		}
+		else if (checkDir.z < 0f) {
+			if (grid.graph[tileX, tileZ].covSouth == 0) { c++; }
+		}
+		else {
+			if (checkDir.x > 0f) {
+				if (grid.graph[tileX, tileZ].covEast == 0) { c += 2; }
+			}
+			else {
+				if (grid.graph[tileX, tileZ].covWest == 0) { c += 2; }
+			}
+		}
+
+		if (checkDir.x > 0f) {
+			if (grid.graph[tileX, tileZ].covEast == 0) { c++; }
+		}
+		else if (checkDir.x < 0f) {
+			if (grid.graph[tileX, tileZ].covWest == 0) { c++; }
+		}
+		else {
+			if (checkDir.z > 0f) {
+				if (grid.graph[tileX, tileZ].covNorth == 0) { c += 2; }
+			}
+			else {
+				if (grid.graph[tileX, tileZ].covSouth == 0) { c += 2; }
+			}
+		}
+
+		return c;
 	}
 
 	void SetKinematic(bool newValue) {

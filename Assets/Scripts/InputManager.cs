@@ -22,21 +22,10 @@ public class InputManager : MonoBehaviour {
 	public Button moveButton;
 	public Button aimButton;
 	public Button reloadButton;
-
-	public Canvas characterCanvas;
-	public Text cName;
-	public Text cShield;
-	public Text cHealth;
-	public Text cHeat;
-	public Image cPortrait;
 	
 	void Start() {
 		grid = GameObject.Find("Grid").GetComponent<Grid>();
 		combatManager = GameObject.Find("CombatManager").GetComponent<CombatManager>();
-
-		if(characterCanvas == null || cName == null || cShield == null || cHealth == null || cHeat == null || cPortrait == null) {
-			Debug.Log("SelectdCharacterCanvas set-up incorrectly.");
-		}
 
 		NoSelection();
 	}
@@ -98,7 +87,6 @@ public class InputManager : MonoBehaviour {
 							grid.selectedActor = hit.transform.GetComponent<Actor>();
 							currentState = InputState.Idle;
 							UpdateInputUI();
-							UpdateCharacterUI();
 							grid.selectedActor.Selected();
 						}
 						else {
@@ -181,7 +169,6 @@ public class InputManager : MonoBehaviour {
 
 		currentState = InputState.NoSelection;
 		UpdateInputUI();
-		UpdateCharacterUI();
 	}
 
 	private void Idle() {
@@ -257,7 +244,6 @@ public class InputManager : MonoBehaviour {
 				moveButton.interactable = false;
 				aimButton.interactable = false;
 				reloadButton.interactable = false;
-				UpdateCharacterUI();
 				break;
 			case InputState.Idle:
 				if (!grid.selectedActor.hasMoved) {
@@ -293,20 +279,6 @@ public class InputManager : MonoBehaviour {
 					aimButton.interactable = true;
 				}
 				break;
-		}
-	}
-
-	private void UpdateCharacterUI() {
-		if(grid.selectedActor != null) {
-			cName.text = grid.selectedActor.name;
-			cShield.text = grid.selectedActor.currentShield.ToString();
-			cHealth.text = grid.selectedActor.currentHealth.ToString();
-			cHeat.text = grid.selectedActor.weapon.currentHeat.ToString();
-			cPortrait.sprite = grid.selectedActor.characterPortrait;
-			characterCanvas.gameObject.SetActive(true);
-		}
-		else {
-			characterCanvas.gameObject.SetActive(false);
 		}
 	}
 }

@@ -37,14 +37,7 @@ public class Grid : MonoBehaviour {
 				tiles[x, z] = 0;
 			}
 		}
-
-		// Difficult Area
-		for (int x = 3; x <= 5; x++) {
-			for (int z = 0; z < 4; z++) {
-				tiles[x, z] = 1;
-			}
-		}
-
+		
 		tiles[1, 3] = 3;
 		tiles[1, 4] = 3;
 		tiles[1, 5] = 3;
@@ -56,6 +49,9 @@ public class Grid : MonoBehaviour {
 		tiles[6, 1] = 3;
 		tiles[7, 1] = 3;
 		tiles[8, 1] = 3;
+		tiles[10, 14] = 3;
+		tiles[3, 16] = 3;
+		tiles[15, 15] = 3;
 
 		// Impassable area
 		tiles[4, 4] = 2;
