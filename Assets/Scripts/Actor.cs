@@ -7,6 +7,7 @@ public class Actor : MonoBehaviour {
 	//___VISUALS________________________________________________//
 	private Animator anim;
 	public Sprite characterPortrait;
+	private ActorStats actorStats;
 
 	//___MOVEMENT_______________________________________________//
 	[HideInInspector] public int tileX, tileZ;
@@ -76,6 +77,7 @@ public class Actor : MonoBehaviour {
 		SetKinematic(true);
 		anim = GetComponentInChildren<Animator>();
 		weapon = GetComponentInChildren<Weapon>();
+		actorStats = GetComponent<ActorStats>();
 		combatManager = GameObject.Find("CombatManager").GetComponent<CombatManager>();
 		grid = GameObject.Find("Grid").GetComponent<Grid>();
 		shieldVisual = GetComponent<Shield>();
@@ -212,10 +214,17 @@ public class Actor : MonoBehaviour {
 		}
 		else {
 			currentHealth -= damage;
+			if(currentHealth < 0) {
+				currentHealth = 0;
+			}
 		}
-		
 
-		if(currentHealth <= 0)
+		Debug.Log("Shield: " + currentShield);
+		Debug.Log("Health: " + currentHealth);
+
+		actorStats.UpdateShieldHealthVisuals();
+
+		if (currentHealth <= 0)
 		{
 			isIncap = true;
 			GetComponentInChildren<ActorStats>().Deactivate();

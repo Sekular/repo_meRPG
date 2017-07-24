@@ -12,8 +12,66 @@ public class ActorStats : MonoBehaviour {
 	public RectTransform healthBar;
 	public Vector2 healthBarOffset;
 	public Canvas canvas;
+	public float barWidth = 75f;
+	public RectTransform m_shieldPip = null;
+	public RectTransform m_healthPip = null;
+
+	private Actor actor = null;
+	private float healthPipWidth = 0f;
+	private float shieldPipWidth = 0f;
+	private float pipHeight = 5f;
+	private Vector2 shieldOrigin = new Vector2(60, 50);
+	private Vector2 healthOrigin = new Vector2(60, 45);
+	public List<RectTransform> healthPips, shieldPips = null;
 
 	public void Deactivate() { canvas.gameObject.SetActive(false); }
+
+	void Awake() {
+		actor = this.GetComponent<Actor>();
+		healthPipWidth = barWidth / actor.maxHealth;
+		shieldPipWidth = barWidth / actor.maxShield;
+		GenerateStatBars();
+	}
+
+	void GenerateStatBars() {
+		for (int i = 0; i < actor.maxShield; i++) {
+			RectTransform temp = Instantiate(m_shieldPip, transform.position, Quaternion.identity);
+			shieldPips.Add(temp);
+			temp.SetParent(shieldBar.transform);
+			temp.sizeDelta = new Vector2(shieldPipWidth, pipHeight);
+			temp.localScale = Vector3.one;
+			temp.anchoredPosition = shieldOrigin + new Vector2((shieldPipWidth * i), 0f);
+		}
+
+		for (int i = 0; i < actor.maxHealth; i++) {
+			RectTransform temp = Instantiate(m_healthPip, transform.position, Quaternion.identity);
+			healthPips.Add(temp);
+			temp.SetParent(healthBar.transform);
+			temp.sizeDelta = new Vector2(healthPipWidth, pipHeight);
+			temp.localScale = Vector3.one;
+			temp.anchoredPosition = healthOrigin + new Vector2((healthPipWidth * i), 0f);
+		}
+	}
+
+	public void UpdateShieldHealthVisuals() {
+		for (int i = 0; i < healthPips.Count; i++) {
+			if(i + 1 <= actor.currentHealth) {
+				healthPips[i].gameObject.SetActive(true);
+			}
+			else {
+				healthPips[i].gameObject.SetActive(false);
+			}
+		}
+
+		for (int i = 0; i < shieldPips.Count; i++) {
+			if (i + 1 <= actor.currentShield) {
+				shieldPips[i].gameObject.SetActive(true);
+			}
+			else {
+				shieldPips[i].gameObject.SetActive(false);
+			}
+		}
+	}
 
 	void Update() {
 
