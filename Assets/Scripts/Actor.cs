@@ -334,15 +334,16 @@ public class Actor : MonoBehaviour {
 	}
 
 	bool CheckFlanked() {
-		foreach (Actor actor in combatManager.team1) {
+    bool flanked = false;
+    
+    foreach (Actor actor in combatManager.team1) {
 			if (actor.team != team && !actor.isIncap) {
 				RaycastHit hit;
 				Vector3 offset = new Vector3(0f, 1.6f, 0f);
 				Vector3 checkDir = (actor.transform.position + offset) - (transform.position + offset);
 				if (Physics.Raycast(transform.position + offset, checkDir, out hit, actor.weapon.range)) {
 					if(hit.collider.name == actor.name) {
-						if (CheckCoverValues(checkDir) >= 2) { return true; }
-						else { return false; }
+            if (CheckCoverValues(checkDir) >= 2) { flanked = true; }
 					}
 				}
 			}
@@ -355,14 +356,12 @@ public class Actor : MonoBehaviour {
 				Vector3 checkDir = (actor.transform.position + offset) - (transform.position + offset);
 				if (Physics.Raycast(transform.position + offset, checkDir, out hit, actor.weapon.range)) {
 					if (hit.collider.name == actor.name) {
-						if (CheckCoverValues(checkDir) >= 2) { return true; }
-						else { return false; }
-					}
+            if (CheckCoverValues(checkDir) >= 2) { flanked = true; }
+          }
 				}
 			}
 		}
-
-		return false;
+    return flanked;
 	}
 
 	int CheckCoverValues(Vector3 checkDir) {
@@ -371,8 +370,6 @@ public class Actor : MonoBehaviour {
 		checkDir.x = (int)checkDir.x;
 		checkDir.y = (int)checkDir.y;
 		checkDir.z = (int)checkDir.z;
-
-		Debug.Log(checkDir);
 
 		if (checkDir.z > 0f) {
 			if (grid.graph[tileX, tileZ].covNorth == 0) { c++; }
