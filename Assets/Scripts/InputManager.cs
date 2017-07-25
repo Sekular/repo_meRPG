@@ -14,7 +14,7 @@ public enum InputState {
 public class InputManager : MonoBehaviour {
 	private Grid grid;
 
-    private CombatManager combatManager;
+  private CombatManager combatManager;
 	[HideInInspector] public List<Actor> targets;
 
 	[HideInInspector] public InputState currentState = InputState.NoSelection;
@@ -35,29 +35,41 @@ public class InputManager : MonoBehaviour {
 		RunKeyboardInputs();
 	}
 
-	void HighlightTargets(float range) {
-		targets.Clear();
+  void HighlightTargets(float range) {
+    targets.Clear();
 
-		foreach (Actor actor in combatManager.team1) {
-			if (actor.team != grid.selectedActor.team && !actor.isIncap) {
-				if ((Vector3.Distance(grid.selectedActor.transform.position, actor.transform.position)) < range) {
-					targets.Add(actor);
-				}
-			}
-		}
+    foreach (Actor actor in combatManager.team1) {
+      if (actor.team != grid.selectedActor.team && !actor.isIncap) {
+        RaycastHit hit;
+        Vector3 offset = new Vector3(0f, 1.6f, 0f);
+        Vector3 checkDir = (actor.transform.position + offset) - (grid.selectedActor.transform.position + offset);
+        Debug.DrawLine((actor.transform.position + offset), (grid.selectedActor.transform.position + offset));
+        if (Physics.Raycast(grid.selectedActor.transform.position + offset, checkDir, out hit, actor.weapon.range)) {
+          if (hit.collider.name == actor.name) {
+            targets.Add(actor);
+          }
+        }
+      }
+    }
 
-		foreach (Actor actor in combatManager.team2) {
-			if (actor.team != grid.selectedActor.team && !actor.isIncap) {
-				if ((Vector3.Distance(grid.selectedActor.transform.position, actor.transform.position)) < range) {
-					targets.Add(actor);
-				}
-			}
-		}
+    foreach (Actor actor in combatManager.team2) {
+        if (actor.team != grid.selectedActor.team && !actor.isIncap) {
+          RaycastHit hit;
+          Vector3 offset = new Vector3(0f, 1.6f, 0f);
+          Vector3 checkDir = (actor.transform.position + offset) - (grid.selectedActor.transform.position + offset);
+          Debug.DrawLine((actor.transform.position + offset), (grid.selectedActor.transform.position + offset));
+          if (Physics.Raycast(grid.selectedActor.transform.position + offset, checkDir, out hit, actor.weapon.range)) {
+            if (hit.collider.name == actor.name) {
+              targets.Add(actor);
+            }
+          }
+        }
 
-		foreach (Actor target in targets) {
-			target.SetTargeted();
-		}
-	}
+        foreach (Actor target in targets) {
+          target.SetTargeted();
+        }
+    }
+  }
 
 	public void ClearTargets() {
 		foreach (Actor target in targets) {

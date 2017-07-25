@@ -219,9 +219,6 @@ public class Actor : MonoBehaviour {
 			}
 		}
 
-		Debug.Log("Shield: " + currentShield);
-		Debug.Log("Health: " + currentHealth);
-
 		actorStats.UpdateShieldHealthVisuals();
 
 		if (currentHealth <= 0)
