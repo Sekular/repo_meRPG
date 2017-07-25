@@ -8,7 +8,7 @@ public class Grid : MonoBehaviour {
 
 	public int mapSizeX, mapSizeZ; // The size of the map to create.
 
-	int[,] tiles; // Array of tile data. Non-visual.
+	public int[,] tiles; // Array of tile data. Non-visual.
 	// TODO TileType change from an Array to an Enum.
 	public TileType[] tileTypes; // Array of TileTypes that information on how the tile effects movement and what visual to display for the respective tile. Visual.
 

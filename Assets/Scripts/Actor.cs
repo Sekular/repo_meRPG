@@ -349,7 +349,7 @@ public class Actor : MonoBehaviour {
 				Vector3 checkDir = (actor.transform.position + offset) - (transform.position + offset);
 				if (Physics.Raycast(transform.position + offset, checkDir, out hit, actor.weapon.range)) {
 					if(hit.collider.name == actor.name) {
-            if (CheckCoverValues(checkDir) >= 2) { flanked = true; }
+						if (CheckCoverValues(checkDir) >= 2) { flanked = true; }
 					}
 				}
 			}
@@ -362,15 +362,15 @@ public class Actor : MonoBehaviour {
 				Vector3 checkDir = (actor.transform.position + offset) - (transform.position + offset);
 				if (Physics.Raycast(transform.position + offset, checkDir, out hit, actor.weapon.range)) {
 					if (hit.collider.name == actor.name) {
-            if (CheckCoverValues(checkDir) >= 2) { flanked = true; }
-          }
+						if (CheckCoverValues(checkDir) >= 2) { flanked = true; }
+					}
 				}
 			}
 		}
-    return flanked;
+		return flanked;
 	}
 
-	int CheckCoverValues(Vector3 checkDir) {
+	public int CheckCoverValues(Vector3 checkDir) {
 		int c = 0;
 
 		checkDir.x = (int)checkDir.x;

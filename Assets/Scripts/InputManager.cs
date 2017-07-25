@@ -14,8 +14,9 @@ public enum InputState {
 public class InputManager : MonoBehaviour {
 	private Grid grid;
 
-  private CombatManager combatManager;
+	private CombatManager combatManager;
 	[HideInInspector] public List<Actor> targets;
+	[HideInInspector] public List<int> hitChances;
 
 	[HideInInspector] public InputState currentState = InputState.NoSelection;
 
@@ -35,41 +36,109 @@ public class InputManager : MonoBehaviour {
 		RunKeyboardInputs();
 	}
 
-  void HighlightTargets(float range) {
-    targets.Clear();
+	void HighlightTargets(float range) {
+		targets.Clear();
+		hitChances.Clear();
 
-    foreach (Actor actor in combatManager.team1) {
-      if (actor.team != grid.selectedActor.team && !actor.isIncap) {
-        RaycastHit hit;
-        Vector3 offset = new Vector3(0f, 1.6f, 0f);
-        Vector3 checkDir = (actor.transform.position + offset) - (grid.selectedActor.transform.position + offset);
-        Debug.DrawLine((actor.transform.position + offset), (grid.selectedActor.transform.position + offset));
-        if (Physics.Raycast(grid.selectedActor.transform.position + offset, checkDir, out hit, actor.weapon.range)) {
-          if (hit.collider.name == actor.name) {
-            targets.Add(actor);
-          }
-        }
-      }
-    }
+		foreach (Actor actor in combatManager.team1) {
+			if (actor.team != grid.selectedActor.team && !actor.isIncap) {
+				RaycastHit hit;
+				Vector3 offset = new Vector3(0f, 1.6f, 0f);
+				Vector3 checkDir = (actor.transform.position + offset) - (grid.selectedActor.transform.position + offset);
+				Debug.DrawLine((actor.transform.position + offset), (grid.selectedActor.transform.position + offset));
+				if (Physics.Raycast(grid.selectedActor.transform.position + offset, checkDir, out hit, actor.weapon.range)) {
+					if (hit.collider.name == actor.name) {
+						targets.Add(actor);
+						CalculateHitChance(actor);
+					}
+				}
+			}
+		}
 
-    foreach (Actor actor in combatManager.team2) {
-        if (actor.team != grid.selectedActor.team && !actor.isIncap) {
-          RaycastHit hit;
-          Vector3 offset = new Vector3(0f, 1.6f, 0f);
-          Vector3 checkDir = (actor.transform.position + offset) - (grid.selectedActor.transform.position + offset);
-          Debug.DrawLine((actor.transform.position + offset), (grid.selectedActor.transform.position + offset));
-          if (Physics.Raycast(grid.selectedActor.transform.position + offset, checkDir, out hit, actor.weapon.range)) {
-            if (hit.collider.name == actor.name) {
-              targets.Add(actor);
-            }
-          }
-        }
+		foreach (Actor actor in combatManager.team2) {
+			if (actor.team != grid.selectedActor.team && !actor.isIncap) {
+				RaycastHit hit;
+				Vector3 offset = new Vector3(0f, 1.6f, 0f);
+				Vector3 checkDir = (actor.transform.position + offset) - (grid.selectedActor.transform.position + offset);
+				Debug.DrawLine((actor.transform.position + offset), (grid.selectedActor.transform.position + offset));
+				if (Physics.Raycast(grid.selectedActor.transform.position + offset, checkDir, out hit, actor.weapon.range)) {
+					if (hit.collider.name == actor.name) {
+						targets.Add(actor);
+						CalculateHitChance(actor);
+					}
+				}
+			}
 
-        foreach (Actor target in targets) {
-          target.SetTargeted();
-        }
-    }
-  }
+			foreach (Actor target in targets) {
+				target.SetTargeted();
+			}
+		}
+	}
+
+	int CalculateHitChance(Actor actor) {
+		int r = (int)(60 - ((Vector3.Distance(grid.selectedActor.transform.position, actor.transform.position) / actor.weapon.range) * 60));
+		int c = (40 - (CheckTargetCover(actor) * 20));
+		int chanceToHit = r + c;
+		Debug.Log(chanceToHit);
+		return chanceToHit;
+	}
+
+	public int CheckTargetCover(Actor target) {
+		Vector3 checkDir = target.transform.position - grid.selectedActor.transform.position;
+		int c = 0;
+
+		checkDir.x = (int)checkDir.x;
+		checkDir.y = (int)checkDir.y;
+		checkDir.z = (int)checkDir.z;
+
+		if (checkDir.z > 0f) {
+			if (c <= grid.tileTypes[grid.tiles[target.tileX, target.tileZ - 1]].coverRating) {
+				c = grid.tileTypes[grid.tiles[target.tileX, target.tileZ - 1]].coverRating;
+			}
+		}
+		else if (checkDir.z < 0f) {
+			if (c <= grid.tileTypes[grid.tiles[target.tileX, target.tileZ + 1]].coverRating) {
+				c = grid.tileTypes[grid.tiles[target.tileX, target.tileZ + 1]].coverRating;
+			}
+		}
+		else {
+			if (checkDir.x > 0f) {
+				if (c <= grid.tileTypes[grid.tiles[target.tileX - 1, target.tileZ]].coverRating) {
+					c = grid.tileTypes[grid.tiles[target.tileX - 1, target.tileZ]].coverRating;
+				}
+			}
+			else {
+				if (c <= grid.tileTypes[grid.tiles[target.tileX + 1, target.tileZ]].coverRating) {
+					c = grid.tileTypes[grid.tiles[target.tileX + 1, target.tileZ]].coverRating;
+				}
+			}
+		}
+
+		if (checkDir.x > 0f) {
+			if (c <= grid.tileTypes[grid.tiles[target.tileX - 1, target.tileZ]].coverRating) {
+				c = grid.tileTypes[grid.tiles[target.tileX - 1, target.tileZ]].coverRating;
+			}
+		}
+		else if (checkDir.x < 0f) {
+			if (c <= grid.tileTypes[grid.tiles[target.tileX + 1, target.tileZ]].coverRating) {
+				c = grid.tileTypes[grid.tiles[target.tileX + 1, target.tileZ]].coverRating;
+			}
+		}
+		else {
+			if (checkDir.z > 0f) {
+				if (c <= grid.tileTypes[grid.tiles[target.tileX, target.tileZ - 1]].coverRating) {
+					c = grid.tileTypes[grid.tiles[target.tileX, target.tileZ - 1]].coverRating;
+				}
+			}
+			else {
+				if (c <= grid.tileTypes[grid.tiles[target.tileX, target.tileZ + 1]].coverRating) {
+					c = grid.tileTypes[grid.tiles[target.tileX, target.tileZ + 1]].coverRating;
+				}
+			}
+		}
+
+		return c;
+	}
 
 	public void ClearTargets() {
 		foreach (Actor target in targets) {
