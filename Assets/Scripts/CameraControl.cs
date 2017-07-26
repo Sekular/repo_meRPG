@@ -4,92 +4,74 @@ using UnityEngine;
 
 public class CameraControl : MonoBehaviour {
 
-	public float keyPanSpeed = 7.5f;
-	public float mousePanSpeed = 20f;
-	public float zoomSpeed = 15f;
-	public float zoomStep = 100f;
-	public float rotateSpeed = 1f;
+	public float m_fKeyPanSpeed = 7.5f;		// Rate at which the camera pans from a keyboard input.
+	public float m_fMousePanSpeed = 20f;	// Rate at which the camera pans from a mouse input.
+	public float m_fZoomSpeed = 15f;		// Rate at which the camera zooms from a keyboard input.
+	public float m_fZoomStep = 100f;		// Rate at which the camera zooms from a mouse-wheel input.
 
+	[HideInInspector] public bool m_bCameraDragging = false;	// Is the camera currently being moved via the mouse?
 
-	public float dragSpeed = 2;
-	private Vector3 dragOrigin;
-
-	public bool cameraDragging = false;
-
-	public float outerLeft = -10f;
-	public float outerRight = 10f;
+	private Vector3 m_vDragOrigin;	// The origin point of when the player begins a mouse move input. Used to calculate drag direction.
 
 	void LateUpdate() {
-		RunMouseInputs();
-		if (!cameraDragging) {
-			RunKeyboardInputs();
-		}
+		MouseInputs();
+		if (!m_bCameraDragging) { KeyboardInputs(); }
 	}
 
-	void RunMouseInputs() {
-		if (Input.GetMouseButtonDown(1)) {
-			dragOrigin = Input.mousePosition;
-		}
+	void MouseInputs() {
+		if (Input.GetAxis("Mouse ScrollWheel") > 0) { MoveCamera(Vector3.forward, m_fZoomStep); }
+		if (Input.GetAxis("Mouse ScrollWheel") < 0) { MoveCamera(Vector3.back, m_fZoomStep); }
 
+		if (Input.GetMouseButtonDown(1)) { m_vDragOrigin = Input.mousePosition; }
 		if (Input.GetMouseButton(1)) {
-			cameraDragging = true;
+			m_bCameraDragging = true;
 		}
 		else {
-			cameraDragging = false;
+			m_bCameraDragging = false;
 			return;
 		}
 
-		Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - dragOrigin);
+		Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - m_vDragOrigin);
 		Vector3.Normalize(pos);
 		
 		if (pos.x > 0f) {
-			transform.Translate(Vector3.right * Time.deltaTime * mousePanSpeed * pos.x);
+			MoveCamera(Vector3.right, m_fMousePanSpeed * pos.x);
 		}
 		else {
-			transform.Translate(Vector3.left * Time.deltaTime * mousePanSpeed * -pos.x);
+			MoveCamera(Vector3.left, m_fMousePanSpeed * -pos.x);
 		}
 
 		if (pos.y > 0f) {
 			Vector3 up = transform.TransformDirection(Vector3.forward);
 			up.y = 0;
-			transform.Translate(transform.InverseTransformDirection(Vector3.Normalize(up)) * Time.deltaTime * mousePanSpeed * pos.y);
+			MoveCamera(transform.InverseTransformDirection(Vector3.Normalize(up)), m_fMousePanSpeed * pos.y);
 		}
 		else {
 			Vector3 down = transform.TransformDirection(Vector3.back);
 			down.y = 0;
-			transform.Translate(transform.InverseTransformDirection(Vector3.Normalize(down)) * Time.deltaTime * mousePanSpeed * -pos.y);
+			MoveCamera(transform.InverseTransformDirection(Vector3.Normalize(down)), m_fMousePanSpeed * -pos.y);
 		}
 	}
 
+	void KeyboardInputs() {
+		if (Input.GetKey(KeyCode.KeypadPlus)) { MoveCamera(Vector3.forward, m_fZoomSpeed); }
+		if (Input.GetKey(KeyCode.KeypadMinus)) { MoveCamera(Vector3.back, m_fZoomSpeed); }
+		if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) { MoveCamera(Vector3.left, m_fKeyPanSpeed); }
+		if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) { MoveCamera(Vector3.right, m_fKeyPanSpeed); }
 
-	void RunKeyboardInputs() {
-		if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) {
-			transform.Translate(Vector3.left * Time.deltaTime * keyPanSpeed);
-		}
-		if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) {
-			transform.Translate(Vector3.right * Time.deltaTime * keyPanSpeed);
-		}
 		if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) {
 			Vector3 up = transform.TransformDirection(Vector3.forward);
 			up.y = 0;
-			transform.Translate(transform.InverseTransformDirection(Vector3.Normalize(up)) * Time.deltaTime * keyPanSpeed);
+			MoveCamera(transform.InverseTransformDirection(Vector3.Normalize(up)), m_fKeyPanSpeed);
 		}
 		if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) {
 			Vector3 down = transform.TransformDirection(Vector3.back);
 			down.y = 0;
-			transform.Translate(transform.InverseTransformDirection(Vector3.Normalize(down)) * Time.deltaTime * keyPanSpeed);
+			MoveCamera(transform.InverseTransformDirection(Vector3.Normalize(down)), m_fKeyPanSpeed);
 		}
-		if (Input.GetKey(KeyCode.KeypadPlus)) {
-			transform.Translate(Vector3.forward * Time.deltaTime * zoomSpeed);
-		}
-		if (Input.GetKey(KeyCode.KeypadMinus)) {
-			transform.Translate(Vector3.back * Time.deltaTime * zoomSpeed);
-		}
-		if (Input.GetAxis("Mouse ScrollWheel") > 0) {
-			transform.Translate(Vector3.forward * Time.deltaTime * zoomStep);
-		}
-		if (Input.GetAxis("Mouse ScrollWheel") < 0) {
-			transform.Translate(Vector3.back * Time.deltaTime * zoomStep);
-		}
+	}
+
+	void MoveCamera(Vector3 moveDir, float moveSpeed) {
+		transform.Translate(moveDir * Time.deltaTime * moveSpeed);
 	}
 }
