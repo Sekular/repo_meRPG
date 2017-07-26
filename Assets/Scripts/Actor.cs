@@ -186,7 +186,7 @@ public class Actor : MonoBehaviour {
         weapon.Fire();
 		yield return new WaitForSeconds(fireTime);
         anim.SetBool("IsAiming", false);
-		target.TakeDamage(weapon.damage, attacker);
+		target.TakeDamage(weapon.m_iDamage, attacker);
 
         hasActed = true;
 
@@ -347,7 +347,7 @@ public class Actor : MonoBehaviour {
 				RaycastHit hit;
 				Vector3 offset = new Vector3(0f, 1.6f, 0f);
 				Vector3 checkDir = (actor.transform.position + offset) - (transform.position + offset);
-				if (Physics.Raycast(transform.position + offset, checkDir, out hit, actor.weapon.range)) {
+				if (Physics.Raycast(transform.position + offset, checkDir, out hit, actor.weapon.m_fRange)) {
 					if(hit.collider.name == actor.name) {
 						if (CheckCoverValues(checkDir) >= 2) { flanked = true; }
 					}
@@ -360,7 +360,7 @@ public class Actor : MonoBehaviour {
 				RaycastHit hit;
 				Vector3 offset = new Vector3(0f, 1.6f, 0f);
 				Vector3 checkDir = (actor.transform.position + offset) - (transform.position + offset);
-				if (Physics.Raycast(transform.position + offset, checkDir, out hit, actor.weapon.range)) {
+				if (Physics.Raycast(transform.position + offset, checkDir, out hit, actor.weapon.m_fRange)) {
 					if (hit.collider.name == actor.name) {
 						if (CheckCoverValues(checkDir) >= 2) { flanked = true; }
 					}

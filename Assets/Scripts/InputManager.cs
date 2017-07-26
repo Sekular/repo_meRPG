@@ -39,7 +39,7 @@ public class InputManager : MonoBehaviour {
 	void HighlightTargets() {
 		targets.Clear();
 		hitChances.Clear();
-
+		
 		foreach (Actor actor in combatManager.team1) {
 			if (actor.team != grid.selectedActor.team && !actor.isIncap) {
 				GetTargets(actor);
@@ -62,7 +62,7 @@ public class InputManager : MonoBehaviour {
 		Vector3 offset = new Vector3(0f, 1.6f, 0f);
 		Vector3 checkDir = (actor.transform.position + offset) - (grid.selectedActor.transform.position + offset);
 		Debug.DrawLine((actor.transform.position + offset), (grid.selectedActor.transform.position + offset));
-		if (Physics.Raycast(grid.selectedActor.transform.position + offset, checkDir, out hit, actor.weapon.range)) {
+		if (Physics.Raycast(grid.selectedActor.transform.position + offset, checkDir, out hit, actor.weapon.m_fRange)) {
 			if (hit.collider.name == actor.name) {
 				targets.Add(actor);
 				hitChances.Add(CalculateHitChance(actor));
@@ -71,7 +71,7 @@ public class InputManager : MonoBehaviour {
 	}
 
 	int CalculateHitChance(Actor actor) {
-		int r = (int)(60 - ((Vector3.Distance(grid.selectedActor.transform.position, actor.transform.position) / actor.weapon.range) * 60));
+		int r = (int)(60 - ((Vector3.Distance(grid.selectedActor.transform.position, actor.transform.position) / actor.weapon.m_fRange) * 60));
 		int c = (40 - (CheckTargetCover(actor) * 20));
 		int chanceToHit = r + c;
 		Debug.Log(chanceToHit);
@@ -87,47 +87,47 @@ public class InputManager : MonoBehaviour {
 		checkDir.z = (int)checkDir.z;
 
 		if (checkDir.z > 0f) {
-			if (c <= grid.tileTypes[grid.tiles[target.tileX, target.tileZ - 1]].coverRating) {
-				c = grid.tileTypes[grid.tiles[target.tileX, target.tileZ - 1]].coverRating;
+			if (c <= grid.tileTypes[grid.tiles[target.tileX, target.tileZ - 1]].m_iCoverRating) {
+				c = grid.tileTypes[grid.tiles[target.tileX, target.tileZ - 1]].m_iCoverRating;
 			}
 		}
 		else if (checkDir.z < 0f) {
-			if (c <= grid.tileTypes[grid.tiles[target.tileX, target.tileZ + 1]].coverRating) {
-				c = grid.tileTypes[grid.tiles[target.tileX, target.tileZ + 1]].coverRating;
+			if (c <= grid.tileTypes[grid.tiles[target.tileX, target.tileZ + 1]].m_iCoverRating) {
+				c = grid.tileTypes[grid.tiles[target.tileX, target.tileZ + 1]].m_iCoverRating;
 			}
 		}
 		else {
 			if (checkDir.x > 0f) {
-				if (c <= grid.tileTypes[grid.tiles[target.tileX - 1, target.tileZ]].coverRating) {
-					c = grid.tileTypes[grid.tiles[target.tileX - 1, target.tileZ]].coverRating;
+				if (c <= grid.tileTypes[grid.tiles[target.tileX - 1, target.tileZ]].m_iCoverRating) {
+					c = grid.tileTypes[grid.tiles[target.tileX - 1, target.tileZ]].m_iCoverRating;
 				}
 			}
 			else {
-				if (c <= grid.tileTypes[grid.tiles[target.tileX + 1, target.tileZ]].coverRating) {
-					c = grid.tileTypes[grid.tiles[target.tileX + 1, target.tileZ]].coverRating;
+				if (c <= grid.tileTypes[grid.tiles[target.tileX + 1, target.tileZ]].m_iCoverRating) {
+					c = grid.tileTypes[grid.tiles[target.tileX + 1, target.tileZ]].m_iCoverRating;
 				}
 			}
 		}
 
 		if (checkDir.x > 0f) {
-			if (c <= grid.tileTypes[grid.tiles[target.tileX - 1, target.tileZ]].coverRating) {
-				c = grid.tileTypes[grid.tiles[target.tileX - 1, target.tileZ]].coverRating;
+			if (c <= grid.tileTypes[grid.tiles[target.tileX - 1, target.tileZ]].m_iCoverRating) {
+				c = grid.tileTypes[grid.tiles[target.tileX - 1, target.tileZ]].m_iCoverRating;
 			}
 		}
 		else if (checkDir.x < 0f) {
-			if (c <= grid.tileTypes[grid.tiles[target.tileX + 1, target.tileZ]].coverRating) {
-				c = grid.tileTypes[grid.tiles[target.tileX + 1, target.tileZ]].coverRating;
+			if (c <= grid.tileTypes[grid.tiles[target.tileX + 1, target.tileZ]].m_iCoverRating) {
+				c = grid.tileTypes[grid.tiles[target.tileX + 1, target.tileZ]].m_iCoverRating;
 			}
 		}
 		else {
 			if (checkDir.z > 0f) {
-				if (c <= grid.tileTypes[grid.tiles[target.tileX, target.tileZ - 1]].coverRating) {
-					c = grid.tileTypes[grid.tiles[target.tileX, target.tileZ - 1]].coverRating;
+				if (c <= grid.tileTypes[grid.tiles[target.tileX, target.tileZ - 1]].m_iCoverRating) {
+					c = grid.tileTypes[grid.tiles[target.tileX, target.tileZ - 1]].m_iCoverRating;
 				}
 			}
 			else {
-				if (c <= grid.tileTypes[grid.tiles[target.tileX, target.tileZ + 1]].coverRating) {
-					c = grid.tileTypes[grid.tiles[target.tileX, target.tileZ + 1]].coverRating;
+				if (c <= grid.tileTypes[grid.tiles[target.tileX, target.tileZ + 1]].m_iCoverRating) {
+					c = grid.tileTypes[grid.tiles[target.tileX, target.tileZ + 1]].m_iCoverRating;
 				}
 			}
 		}

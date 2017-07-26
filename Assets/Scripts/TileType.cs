@@ -4,9 +4,9 @@ using UnityEngine;
 
 [System.Serializable]
 public class TileType {
-	public string name;
-	public GameObject tileObject;
-	public float moveCost = 1;
-	public int coverRating = 0;
-	public bool isWalkable = true;
+	public string m_sName;
+	public GameObject m_tileObject;
+	public int m_iMoveCost = 1;
+	public int m_iCoverRating = 0;
+	public bool m_bIsWalkable = true;
 }

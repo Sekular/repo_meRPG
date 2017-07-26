@@ -18,7 +18,7 @@ public class Grid : MonoBehaviour {
 	// Converts tile values into world position.
 	public Vector3 TileToWorld(int x, int z) { return new Vector3(x, 0, z); }
 	// Checks if an Actor can enter a tile based on the TileType v MovementType
-	public bool ValidTile(int x, int z) { return tileTypes[tiles[x, z]].isWalkable; }
+	public bool ValidTile(int x, int z) { return tileTypes[tiles[x, z]].m_bIsWalkable; }
 
 	void Start() {
 		GenerateMapData();
@@ -38,32 +38,32 @@ public class Grid : MonoBehaviour {
 			}
 		}
 		
-		tiles[1, 3] = 3;
-		tiles[1, 4] = 3;
-		tiles[1, 5] = 3;
-		tiles[1, 6] = 3;
-		tiles[1, 7] = 3;
+		tiles[1, 3] = 2;
+		tiles[1, 4] = 2;
+		tiles[1, 5] = 2;
+		tiles[1, 6] = 2;
+		tiles[1, 7] = 2;
 
-		tiles[4, 1] = 3;
-		tiles[5, 1] = 3;
-		tiles[6, 1] = 3;
-		tiles[7, 1] = 3;
-		tiles[8, 1] = 3;
-		tiles[10, 14] = 3;
-		tiles[3, 16] = 3;
-		tiles[15, 15] = 3;
+		tiles[4, 1] = 2;
+		tiles[5, 1] = 2;
+		tiles[6, 1] = 2;
+		tiles[7, 1] = 2;
+		tiles[8, 1] = 2;
+		tiles[10, 14] = 2;
+		tiles[3, 16] = 2;
+		tiles[15, 15] = 2;
 
 		// Impassable area
-		tiles[4, 4] = 2;
-		tiles[5, 4] = 2;
-		tiles[6, 4] = 2;
-		tiles[7, 4] = 2;
-		tiles[8, 4] = 2;
+		tiles[4, 4] = 1;
+		tiles[5, 4] = 1;
+		tiles[6, 4] = 1;
+		tiles[7, 4] = 1;
+		tiles[8, 4] = 1;
 
-		tiles[4, 5] = 2;
-		tiles[4, 6] = 2;
-		tiles[8, 5] = 2;
-		tiles[8, 6] = 2;
+		tiles[4, 5] = 1;
+		tiles[4, 6] = 1;
+		tiles[8, 5] = 1;
+		tiles[8, 6] = 1;
 	}
 
 	// Returns the cost to enter the tile coordinates parsed.
@@ -74,7 +74,7 @@ public class Grid : MonoBehaviour {
 			return Mathf.Infinity;
 		}
 
-		float cost = tt.moveCost;
+		float cost = tt.m_iMoveCost;
 
 		// Detect diagonal movement
 		if (sourceX != targetX && sourceZ != targetZ) {
@@ -109,7 +109,7 @@ public class Grid : MonoBehaviour {
 				// Find 3 left neighbours
 				if (x > 0) {
 					graph[x, z].neighbours.Add(graph[x - 1, z]);
-					graph[x, z].covWest = tileTypes[tiles[x - 1, z]].coverRating;
+					graph[x, z].covWest = tileTypes[tiles[x - 1, z]].m_iCoverRating;
 					if (z > 0) { graph[x, z].neighbours.Add(graph[x - 1, z - 1]); }
 					if (z < mapSizeZ - 1) { graph[x, z].neighbours.Add(graph[x - 1, z + 1]); }
 				}
@@ -117,7 +117,7 @@ public class Grid : MonoBehaviour {
 				// Find 3 right neighbours
 				if (x < mapSizeX - 1) {
 					graph[x, z].neighbours.Add(graph[x + 1, z]);
-					graph[x, z].covEast = tileTypes[tiles[x + 1, z]].coverRating;
+					graph[x, z].covEast = tileTypes[tiles[x + 1, z]].m_iCoverRating;
 					if (z > 0) { graph[x, z].neighbours.Add(graph[x + 1, z - 1]); }
 					if (z < mapSizeZ - 1) { graph[x, z].neighbours.Add(graph[x + 1, z + 1]); }
 				}
@@ -125,11 +125,11 @@ public class Grid : MonoBehaviour {
 				// Find up and down.
 				if (z > 0) {
 					graph[x, z].neighbours.Add(graph[x, z - 1]);
-					graph[x, z].covSouth = tileTypes[tiles[x, z - 1]].coverRating;
+					graph[x, z].covSouth = tileTypes[tiles[x, z - 1]].m_iCoverRating;
 				}
 				if (z < mapSizeZ - 1) {
 					graph[x, z].neighbours.Add(graph[x, z + 1]);
-					graph[x, z].covNorth = tileTypes[tiles[x, z + 1]].coverRating;
+					graph[x, z].covNorth = tileTypes[tiles[x, z + 1]].m_iCoverRating;
 				}
 			}
 		}
@@ -141,7 +141,7 @@ public class Grid : MonoBehaviour {
 			for (int z = 0; z < mapSizeZ; z++) {
 				TileType t = tileTypes[tiles[x, z]];
 
-				GameObject go = Instantiate(t.tileObject, new Vector3(x, 0f, z), Quaternion.identity);
+				GameObject go = Instantiate(t.m_tileObject, new Vector3(x, 0f, z), Quaternion.identity);
 
 				MoveTile mt = go.GetComponent<MoveTile>();
 				mt.tileX = x;

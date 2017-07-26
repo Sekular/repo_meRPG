@@ -4,19 +4,17 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-	public float range;
-	public int damage;
-
-	public ParticleSystem firingPS;
-    public ParticleSystem flashPS;
-
+	public float m_fRange;
+	public int m_iDamage;
+	public ParticleSystem m_psFiring;
+    public ParticleSystem m_psFlashPS;
     public int maxHeat;
     [HideInInspector] public int currentHeat;
 
     public void Fire() {
 		currentHeat++;
 
-		firingPS.Play();
-        flashPS.Play();
+		m_psFiring.Play();
+		m_psFlashPS.Play();
     }
 }
