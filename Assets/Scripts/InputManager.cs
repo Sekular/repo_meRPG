@@ -36,41 +36,36 @@ public class InputManager : MonoBehaviour {
 		RunKeyboardInputs();
 	}
 
-	void HighlightTargets(float range) {
+	void HighlightTargets() {
 		targets.Clear();
 		hitChances.Clear();
 
 		foreach (Actor actor in combatManager.team1) {
 			if (actor.team != grid.selectedActor.team && !actor.isIncap) {
-				RaycastHit hit;
-				Vector3 offset = new Vector3(0f, 1.6f, 0f);
-				Vector3 checkDir = (actor.transform.position + offset) - (grid.selectedActor.transform.position + offset);
-				Debug.DrawLine((actor.transform.position + offset), (grid.selectedActor.transform.position + offset));
-				if (Physics.Raycast(grid.selectedActor.transform.position + offset, checkDir, out hit, actor.weapon.range)) {
-					if (hit.collider.name == actor.name) {
-						targets.Add(actor);
-						CalculateHitChance(actor);
-					}
-				}
+				GetTargets(actor);
 			}
 		}
 
 		foreach (Actor actor in combatManager.team2) {
 			if (actor.team != grid.selectedActor.team && !actor.isIncap) {
-				RaycastHit hit;
-				Vector3 offset = new Vector3(0f, 1.6f, 0f);
-				Vector3 checkDir = (actor.transform.position + offset) - (grid.selectedActor.transform.position + offset);
-				Debug.DrawLine((actor.transform.position + offset), (grid.selectedActor.transform.position + offset));
-				if (Physics.Raycast(grid.selectedActor.transform.position + offset, checkDir, out hit, actor.weapon.range)) {
-					if (hit.collider.name == actor.name) {
-						targets.Add(actor);
-						CalculateHitChance(actor);
-					}
-				}
+				GetTargets(actor);
 			}
+		}
 
-			foreach (Actor target in targets) {
-				target.SetTargeted();
+		foreach (Actor target in targets) {
+			target.SetTargeted();
+		}
+	}
+
+	private void GetTargets(Actor actor) {
+		RaycastHit hit;
+		Vector3 offset = new Vector3(0f, 1.6f, 0f);
+		Vector3 checkDir = (actor.transform.position + offset) - (grid.selectedActor.transform.position + offset);
+		Debug.DrawLine((actor.transform.position + offset), (grid.selectedActor.transform.position + offset));
+		if (Physics.Raycast(grid.selectedActor.transform.position + offset, checkDir, out hit, actor.weapon.range)) {
+			if (hit.collider.name == actor.name) {
+				targets.Add(actor);
+				hitChances.Add(CalculateHitChance(actor));
 			}
 		}
 	}
@@ -286,7 +281,7 @@ public class InputManager : MonoBehaviour {
 			grid.selectedActor.ReloadDeactive();
 			if (!grid.selectedActor.hasActed) {
 				if (currentState != InputState.Aiming) {
-					HighlightTargets(grid.selectedActor.weapon.range);
+					HighlightTargets();
 					currentState = InputState.Aiming;
 					UpdateInputUI();
 				}
