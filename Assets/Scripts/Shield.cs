@@ -4,41 +4,37 @@ using UnityEngine;
 
 public class Shield : MonoBehaviour {
 
-	public GameObject[] shieldObjects;
+	public GameObject[] m_shieldObjects;		// List of objects that represent the shield visual in game.
+	public float m_fShieldIntensity = 2.5f;		// Intensity of shield visual when initially struck.
+	public float m_fFlashDecay = 2.5f;			// The speed at which the shield intensity decays to 0 after it is struck.
 
-	public float shieldIntensity;
-	public float decayDelay;
-	public float flashDecay;
+	private void SetShieldIntensity(GameObject so, float i) { so.GetComponent<Renderer>().material.SetFloat("_Strength", i); }
 
 	public void ShieldHit() {
 		StopAllCoroutines();
 		StartCoroutine(ShieldHitCR());
 	}
 
-	public void ShieldBroken() {
-		Debug.Log("Play Shield Broken Effect");
-	}
-
+	// Sets the Shield to its max intensity and then decays the visual over time.
 	private IEnumerator ShieldHitCR() {
-		foreach(GameObject so in shieldObjects) {
-			Renderer r = so.GetComponent<Renderer>();
-			r.material.SetFloat("_Strength", shieldIntensity);
+		foreach(GameObject so in m_shieldObjects) {
+			SetShieldIntensity(so, m_fShieldIntensity);
 		}
-
-		//yield return new WaitForSeconds(decayDelay);
 
 		float t = 0;
 		float currentIntensity = 0;
 
 		while (t < 1) {
-			t += Time.deltaTime * flashDecay;
-			currentIntensity = Mathf.Lerp(shieldIntensity, 0f, t);
-			foreach (GameObject so in shieldObjects) {
-				Renderer r = so.GetComponent<Renderer>();
-				r.material.SetFloat("_Strength", currentIntensity);
+			t += Time.deltaTime * m_fFlashDecay;
+			currentIntensity = Mathf.Lerp(m_fShieldIntensity, 0f, t);
+			foreach (GameObject so in m_shieldObjects) {
+				SetShieldIntensity(so, currentIntensity);
 				yield return null;
 			}
 		}
 	}
-	
+
+	public void ShieldBroken() {
+		Debug.Log("Play Shield Broken Effect");
+	}
 }

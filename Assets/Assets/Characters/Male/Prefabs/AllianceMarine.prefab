@@ -1223,7 +1223,6 @@ GameObject:
   - component: {fileID: 4508027632463292}
   - component: {fileID: 33650021397713244}
   - component: {fileID: 23216952259880142}
-  - component: {fileID: 114387726705430162}
   m_Layer: 0
   m_Name: ReloadIcon
   m_TagString: Untagged
@@ -4590,17 +4589,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114387726705430162
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1589766014315238}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac0cd5bc831b12e4899a7f3812925a1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114403911882092922
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4882,13 +4870,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce8b8856b7d5944c987980017b9abc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shieldObjects:
+  m_shieldObjects:
   - {fileID: 1540280362415864}
   - {fileID: 1872298698216070}
   - {fileID: 1627875955652492}
-  shieldIntensity: 2.5
-  decayDelay: 0.1
-  flashDecay: 2
+  m_fShieldIntensity: 2.5
+  m_fFlashDecay: 2.5
 --- !u!114 &114907755431246442
 MonoBehaviour:
   m_ObjectHideFlags: 1

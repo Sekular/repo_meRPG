@@ -1506,9 +1506,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4474459843688670}
   - component: {fileID: 114577676615893994}
+  - component: {fileID: 114258951013239242}
   - component: {fileID: 136707795060370766}
   - component: {fileID: 114561464026853920}
-  - component: {fileID: 114258951013239242}
   m_Layer: 0
   m_Name: CerberusTrooper
   m_TagString: Untagged
@@ -1783,7 +1783,6 @@ GameObject:
   - component: {fileID: 33670458779359988}
   - component: {fileID: 135468208348937490}
   - component: {fileID: 23103951699188080}
-  - component: {fileID: 114011951012806116}
   m_Layer: 0
   m_Name: ReloadIcon
   m_TagString: Untagged
@@ -4193,17 +4192,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114011951012806116
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1811220826493226}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac0cd5bc831b12e4899a7f3812925a1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114012938419126404
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4613,11 +4601,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce8b8856b7d5944c987980017b9abc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shieldObjects:
+  m_shieldObjects:
   - {fileID: 1663452899427250}
-  shieldIntensity: 2.5
-  decayDelay: 0.1
-  flashDecay: 2
+  m_fShieldIntensity: 2.5
+  m_fFlashDecay: 1
 --- !u!114 &114577676615893994
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5197,7 +5184,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.110601775, y: -0.015632443, z: 0.026996536}
+  m_ConnectedAnchor: {x: 0.1106019, y: -0.015632346, z: 0.026997484}
   serializedVersion: 2
   m_SwingAxis: {x: 1, y: 0, z: 0}
   m_TwistLimitSpring:
@@ -5239,7 +5226,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.00000012665984, y: 0.4475014, z: -0.000001683831}
+  m_ConnectedAnchor: {x: -0.00000007450579, y: 0.44750157, z: -0.0000016689298}
   serializedVersion: 2
   m_SwingAxis: {x: 1, y: 0, z: 0}
   m_TwistLimitSpring:
@@ -5323,7 +5310,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.00000016955092, y: 0.030969225, z: -0.014113776}
+  m_ConnectedAnchor: {x: -0.00000017235328, y: 0.030969232, z: -0.014113784}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -5491,7 +5478,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.0000012122617, y: 0.44750115, z: 0.0000014081597}
+  m_ConnectedAnchor: {x: -0.0000011239025, y: 0.44750133, z: 0.00000115484}
   serializedVersion: 2
   m_SwingAxis: {x: 1, y: 0, z: 0}
   m_TwistLimitSpring:
@@ -5575,7 +5562,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.11060203, y: -0.015632339, z: 0.026997352}
+  m_ConnectedAnchor: {x: -0.11060204, y: -0.015632354, z: 0.026997365}
   serializedVersion: 2
   m_SwingAxis: {x: 1, y: 0, z: 0}
   m_TwistLimitSpring:
