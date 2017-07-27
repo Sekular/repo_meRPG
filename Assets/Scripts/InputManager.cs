@@ -170,7 +170,9 @@ public class InputManager : MonoBehaviour {
 						}
 					}
 					else if (hit.transform.GetComponent<Actor>().isTargeted) {
-						grid.selectedActor.Attack(hit.transform.GetComponent<Actor>(), grid.selectedActor);
+						if (grid.selectedActor != null) {
+							grid.selectedActor.Attack(hit.transform.GetComponent<Actor>(), grid.selectedActor);
+						}
 					}
 					else {
 						Debug.Log("Not on active team!");

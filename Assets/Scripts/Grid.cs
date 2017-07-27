@@ -97,8 +97,8 @@ public class Grid : MonoBehaviour {
 				graph[x, z].x = x;
 				graph[x, z].z = z;
 
-				graph[x, z].visual = (NodeVisual)Instantiate(moveVisual, new Vector3(x, 0.05f, z), Quaternion.identity);
-				graph[x, z].visual.Deactivate();
+				graph[x, z].m_moveVisual = (NodeVisual)Instantiate(moveVisual, new Vector3(x, 0.05f, z), Quaternion.identity);
+				graph[x, z].m_moveVisual.Deactivate();
 			}
 		}
 
@@ -202,8 +202,6 @@ public class Grid : MonoBehaviour {
 			unvisited.Remove(u);
 
 			foreach(Node v in u.neighbours) {
-				// Checks distances between current node and neighboring nodes. and updates prev nodes if their distances is shorter than the one already logged.
-				// float alt = dist[u] + u.DistanceTo(v);
 				float alt = dist[u] + CostToEnterTile(u.x, u.z, v.x, v.z);
 				if (alt < dist[v]) {
 					dist[v] = alt;
@@ -240,20 +238,20 @@ public class Grid : MonoBehaviour {
 		nodesToCheck.Add(graph[(int)selectedActor.transform.position.x, (int)selectedActor.transform.position.z]);
 		//nodesToHighlight.Add(graph[(int)selectedActor.transform.position.x, (int)selectedActor.transform.position.z]);
 
-		graph[(int)selectedActor.transform.position.x, (int)selectedActor.transform.position.z].isHighlighted = true;
+		graph[(int)selectedActor.transform.position.x, (int)selectedActor.transform.position.z].m_bIsHighlighted = true;
 
-		graph[(int)selectedActor.transform.position.x, (int)selectedActor.transform.position.z].movesRemaining = startingMovement;
+		graph[(int)selectedActor.transform.position.x, (int)selectedActor.transform.position.z].m_fMovesRemaining = startingMovement;
 
 		// Find all connected nodes with available movement in range.
 		while (nodesToCheck.Count > 0) {
 			Node n = nodesToCheck[0];
 
 			foreach (Node neighbour in n.neighbours) {
-				if (n.movesRemaining - CostToEnterTile(n.x, n.z, neighbour.x, neighbour.z) > 0f) {
-					if ((n.movesRemaining - CostToEnterTile(n.x, n.z, neighbour.x, neighbour.z)) > neighbour.movesRemaining) {
+				if (n.m_fMovesRemaining - CostToEnterTile(n.x, n.z, neighbour.x, neighbour.z) > 0f) {
+					if ((n.m_fMovesRemaining - CostToEnterTile(n.x, n.z, neighbour.x, neighbour.z)) > neighbour.m_fMovesRemaining) {
 						nodesToCheck.Add(neighbour);
-						neighbour.movesRemaining = n.movesRemaining - CostToEnterTile(n.x, n.z, neighbour.x, neighbour.z);
-						if (!neighbour.isHighlighted) {
+						neighbour.m_fMovesRemaining = n.m_fMovesRemaining - CostToEnterTile(n.x, n.z, neighbour.x, neighbour.z);
+						if (!neighbour.m_bIsHighlighted) {
 							nodesToHighlight.Add(neighbour);
 						}
 					}
@@ -264,15 +262,15 @@ public class Grid : MonoBehaviour {
 		}
 		
 		foreach (Node node in nodesToHighlight) {
-			node.visual.Activate();
+			node.m_moveVisual.Activate();
 		}
 	}
 
 	public void ResetMovement() {
 		foreach(Node node in graph) {
-			node.movesRemaining = 0;
-			node.isHighlighted = false;
-			node.visual.Deactivate();
+			node.m_fMovesRemaining = 0;
+			node.m_bIsHighlighted = false;
+			node.m_moveVisual.Deactivate();
 		}
 	}
 }
