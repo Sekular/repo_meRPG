@@ -941,9 +941,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfda5c11b9e0d8b4cae6809098b40512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedActor: {fileID: 0}
-  mapSizeX: 20
-  mapSizeZ: 20
+  m_levelTemplate: {fileID: 2800000, guid: 652406725b3b0254482ab1156951078e, type: 3}
+  m_iMapSizeX: 20
+  m_iMapSizeZ: 20
   tileTypes:
   - m_sName: Open Ground
     m_tileObject: {fileID: 1128420558970852, guid: baa695ae5422f5640abe02df5527b233,
@@ -963,8 +963,9 @@ MonoBehaviour:
     m_iMoveCost: 999
     m_iCoverRating: 2
     m_bIsWalkable: 0
-  moveVisual: {fileID: 114556578597888960, guid: 34d43c70ebb986b439c2746f9bd47643,
+  m_moveVisual: {fileID: 114556578597888960, guid: 34d43c70ebb986b439c2746f9bd47643,
     type: 2}
+  selectedActor: {fileID: 0}
 --- !u!4 &1115429961
 Transform:
   m_ObjectHideFlags: 0

@@ -4,16 +4,18 @@ using System.Linq;
 using UnityEngine;
 
 public class Grid : MonoBehaviour {
-	[HideInInspector] public Actor selectedActor;
+	
 
-	public int mapSizeX, mapSizeZ; // The size of the map to create.
+	public Texture2D m_levelTemplate;				// Bitmap used to create the functional layer of the level.
+	public int m_iMapSizeX, m_iMapSizeZ;			// The size of the map to create.
+	public TileType[] tileTypes;                    // TODO TileType change from an Array to an Enum.
+													// Array of TileTypes that information on how the tile effects movement and what
+													// visual to display for the respective tile. Visual.
 
-	public int[,] tiles; // Array of tile data. Non-visual.
-	// TODO TileType change from an Array to an Enum.
-	public TileType[] tileTypes; // Array of TileTypes that information on how the tile effects movement and what visual to display for the respective tile. Visual.
-
-	public Node[,] graph; // Array of Nodes that contain references to their neighbours. Non-visual.
-	public NodeVisual moveVisual;
+	public NodeVisual m_moveVisual;					// Object used to display potential movement for an Actor.
+	[HideInInspector] public Actor selectedActor;	// The currently selected Actor.
+	[HideInInspector] public int[,] tiles;          // Array of tile data. Non-visual.
+	[HideInInspector] public Node[,] graph;			// Array of Nodes that contain references to their neighbours. Non-visual.
 
 	// Converts tile values into world position.
 	public Vector3 TileToWorld(int x, int z) { return new Vector3(x, 0, z); }
@@ -29,41 +31,27 @@ public class Grid : MonoBehaviour {
 	// Initializes the basic map data.
 	void GenerateMapData() {
 		// Allocate map tiles
-		tiles = new int[mapSizeX, mapSizeZ];
+		tiles = new int[m_iMapSizeX, m_iMapSizeZ];
 
-		// Initialize map tiles
-		for (int x = 0; x < mapSizeX; x++) {
-			for (int z = 0; z < mapSizeZ; z++) {
-				tiles[x, z] = 0;
+		// Get pixel information from the level template.
+		Color32[] pixels = m_levelTemplate.GetPixels32();
+		int p = 0;
+
+		// Initialize map tiles from pixel information.
+		for (int z = 0; z < m_iMapSizeZ; z++) {
+			for (int x = 0; x < m_iMapSizeZ; x++) {
+				if (pixels[p] == Color.black) {
+					tiles[x, z] = 2;
+				}
+				else if (pixels[p] == Color.blue) {
+					tiles[x, z] = 1;
+				}
+				else {
+					tiles[x, z] = 0;
+				}
+				p++;
 			}
 		}
-		
-		tiles[1, 3] = 2;
-		tiles[1, 4] = 2;
-		tiles[1, 5] = 2;
-		tiles[1, 6] = 2;
-		tiles[1, 7] = 2;
-
-		tiles[4, 1] = 2;
-		tiles[5, 1] = 2;
-		tiles[6, 1] = 2;
-		tiles[7, 1] = 2;
-		tiles[8, 1] = 2;
-		tiles[10, 14] = 2;
-		tiles[3, 16] = 2;
-		tiles[15, 15] = 2;
-
-		// Impassable area
-		tiles[4, 4] = 1;
-		tiles[5, 4] = 1;
-		tiles[6, 4] = 1;
-		tiles[7, 4] = 1;
-		tiles[8, 4] = 1;
-
-		tiles[4, 5] = 1;
-		tiles[4, 6] = 1;
-		tiles[8, 5] = 1;
-		tiles[8, 6] = 1;
 	}
 
 	// Returns the cost to enter the tile coordinates parsed.
@@ -77,9 +65,7 @@ public class Grid : MonoBehaviour {
 		float cost = tt.m_iMoveCost;
 
 		// Detect diagonal movement
-		if (sourceX != targetX && sourceZ != targetZ) {
-			cost += 0.01f;
-		}
+		if (sourceX != targetX && sourceZ != targetZ) {	cost += 0.01f; }
 
 		return cost;
 	}
@@ -87,47 +73,45 @@ public class Grid : MonoBehaviour {
 	// Generates the grid graph for path-finding. Creates all Nodes in the grid.
 	void GenerateGraph() {
 		// Initialize the array.
-		graph = new Node[mapSizeX, mapSizeZ];
+		graph = new Node[m_iMapSizeX, m_iMapSizeZ];
 
 		// Initialize a Node for each array location.
-		for (int x = 0; x < mapSizeX; x++) {
-			for (int z = 0; z < mapSizeZ; z++) {
+		for (int x = 0; x < m_iMapSizeX; x++) {
+			for (int z = 0; z < m_iMapSizeZ; z++) {
 				graph[x, z] = new Node();
-
 				graph[x, z].x = x;
 				graph[x, z].z = z;
 
-				graph[x, z].m_moveVisual = (NodeVisual)Instantiate(moveVisual, new Vector3(x, 0.05f, z), Quaternion.identity);
+				graph[x, z].m_moveVisual = (NodeVisual)Instantiate(m_moveVisual, new Vector3(x, 0.05f, z), Quaternion.identity);
 				graph[x, z].m_moveVisual.Deactivate();
 			}
 		}
 
 		// Calculate all neighbours (Grid must be constructed first).
-		for (int x = 0; x < mapSizeX; x++) {
-			for (int z = 0; z < mapSizeZ; z++) {
-				// For 8-way movement.
-				// Find 3 left neighbours
+		for (int x = 0; x < m_iMapSizeX; x++) {
+			for (int z = 0; z < m_iMapSizeZ; z++) {
+				// 3 left neighbours.
 				if (x > 0) {
 					graph[x, z].neighbours.Add(graph[x - 1, z]);
 					graph[x, z].covWest = tileTypes[tiles[x - 1, z]].m_iCoverRating;
 					if (z > 0) { graph[x, z].neighbours.Add(graph[x - 1, z - 1]); }
-					if (z < mapSizeZ - 1) { graph[x, z].neighbours.Add(graph[x - 1, z + 1]); }
+					if (z < m_iMapSizeZ - 1) { graph[x, z].neighbours.Add(graph[x - 1, z + 1]); }
 				}
 
-				// Find 3 right neighbours
-				if (x < mapSizeX - 1) {
+				// 3 right neighbours.
+				if (x < m_iMapSizeX - 1) {
 					graph[x, z].neighbours.Add(graph[x + 1, z]);
 					graph[x, z].covEast = tileTypes[tiles[x + 1, z]].m_iCoverRating;
 					if (z > 0) { graph[x, z].neighbours.Add(graph[x + 1, z - 1]); }
-					if (z < mapSizeZ - 1) { graph[x, z].neighbours.Add(graph[x + 1, z + 1]); }
+					if (z < m_iMapSizeZ - 1) { graph[x, z].neighbours.Add(graph[x + 1, z + 1]); }
 				}
 
-				// Find up and down.
+				// Up and down.
 				if (z > 0) {
 					graph[x, z].neighbours.Add(graph[x, z - 1]);
 					graph[x, z].covSouth = tileTypes[tiles[x, z - 1]].m_iCoverRating;
 				}
-				if (z < mapSizeZ - 1) {
+				if (z < m_iMapSizeZ - 1) {
 					graph[x, z].neighbours.Add(graph[x, z + 1]);
 					graph[x, z].covNorth = tileTypes[tiles[x, z + 1]].m_iCoverRating;
 				}
@@ -137,8 +121,8 @@ public class Grid : MonoBehaviour {
 
 	// Generates the physical movement grid and initializes MoveTiles.
 	void GenerateGrid() {
-		for (int x = 0; x < mapSizeX; x++) {
-			for (int z = 0; z < mapSizeZ; z++) {
+		for (int x = 0; x < m_iMapSizeX; x++) {
+			for (int z = 0; z < m_iMapSizeZ; z++) {
 				TileType t = tileTypes[tiles[x, z]];
 
 				GameObject go = Instantiate(t.m_tileObject, new Vector3(x, 0f, z), Quaternion.identity);
