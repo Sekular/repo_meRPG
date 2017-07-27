@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -112,7 +112,7 @@ NavMeshSettings:
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114577676615893994, guid: e17e70158bf02584683a5ac01c630105,
     type: 2}
-  m_PrefabInternal: {fileID: 769245356}
+  m_PrefabInternal: {fileID: 1732402816}
   m_Script: {fileID: 11500000, guid: 7a14929a59f399047b34fba890e9ddeb, type: 3}
 --- !u!1 &316299588
 GameObject:
@@ -304,52 +304,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 338246319}
---- !u!1001 &483088468
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4404722145812120, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4404722145812120, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4404722145812120, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4404722145812120, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4404722145812120, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4404722145812120, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4404722145812120, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4404722145812120, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1913273110458790, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
-      propertyPath: m_Name
-      value: AllianceMarine_01
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1 &575366712
 GameObject:
   m_ObjectHideFlags: 0
@@ -600,57 +554,11 @@ MonoBehaviour:
   m_fZoomSpeed: 15
   m_fZoomStep: 100
   m_bCameraDragging: 0
---- !u!1001 &769245356
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4474459843688670, guid: e17e70158bf02584683a5ac01c630105, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4474459843688670, guid: e17e70158bf02584683a5ac01c630105, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4474459843688670, guid: e17e70158bf02584683a5ac01c630105, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 4474459843688670, guid: e17e70158bf02584683a5ac01c630105, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4474459843688670, guid: e17e70158bf02584683a5ac01c630105, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4474459843688670, guid: e17e70158bf02584683a5ac01c630105, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4474459843688670, guid: e17e70158bf02584683a5ac01c630105, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4474459843688670, guid: e17e70158bf02584683a5ac01c630105, type: 2}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1699153128344158, guid: e17e70158bf02584683a5ac01c630105, type: 2}
-      propertyPath: m_Name
-      value: CerberusTrooper_01
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: e17e70158bf02584683a5ac01c630105, type: 2}
-  m_IsPrefabParent: 0
 --- !u!114 &878373845 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114283892121453188, guid: 297f064f7937c404daf0ae8b2f12c40c,
     type: 2}
-  m_PrefabInternal: {fileID: 483088468}
+  m_PrefabInternal: {fileID: 1003960911}
   m_Script: {fileID: 11500000, guid: 7a14929a59f399047b34fba890e9ddeb, type: 3}
 --- !u!1 &974210731
 GameObject:
@@ -714,6 +622,52 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1003960911
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4404722145812120, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4404722145812120, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4404722145812120, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4404722145812120, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4404722145812120, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4404722145812120, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4404722145812120, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4404722145812120, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913273110458790, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
+      propertyPath: m_Name
+      value: AllianceMarine_01
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 297f064f7937c404daf0ae8b2f12c40c, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1016019854
 GameObject:
   m_ObjectHideFlags: 0
@@ -1143,6 +1097,52 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1661347343}
+--- !u!1001 &1732402816
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4474459843688670, guid: e17e70158bf02584683a5ac01c630105, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4474459843688670, guid: e17e70158bf02584683a5ac01c630105, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4474459843688670, guid: e17e70158bf02584683a5ac01c630105, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4474459843688670, guid: e17e70158bf02584683a5ac01c630105, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4474459843688670, guid: e17e70158bf02584683a5ac01c630105, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4474459843688670, guid: e17e70158bf02584683a5ac01c630105, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4474459843688670, guid: e17e70158bf02584683a5ac01c630105, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4474459843688670, guid: e17e70158bf02584683a5ac01c630105, type: 2}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1699153128344158, guid: e17e70158bf02584683a5ac01c630105, type: 2}
+      propertyPath: m_Name
+      value: CerberusTrooper_01
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: e17e70158bf02584683a5ac01c630105, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1804858225
 GameObject:
   m_ObjectHideFlags: 0
