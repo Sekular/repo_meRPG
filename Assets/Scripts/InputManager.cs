@@ -12,129 +12,23 @@ public enum InputState {
 }
 
 public class InputManager : MonoBehaviour {
-	private Grid grid;
+	public Button m_moveButton;		// The UI button for moving.
+	public Button m_aimButton;		// The UI button for aiming.
+	public Button m_reloadButton;		// The UI button for reloading.
+	[HideInInspector] public InputState m_currentState = InputState.NoSelection;	// The current InputState.
 
-	private CombatManager combatManager;
-	[HideInInspector] public List<Actor> targets;
-	[HideInInspector] public List<int> hitChances;
-
-	[HideInInspector] public InputState currentState = InputState.NoSelection;
-
-	public Button moveButton;
-	public Button aimButton;
-	public Button reloadButton;
+	private Grid grid;      // A reference to the Grid on this level.
+	private CombatManager combatManager;	// A reference to the CombatManager on this level.
 	
 	void Start() {
 		grid = GameObject.Find("Grid").GetComponent<Grid>();
 		combatManager = GameObject.Find("CombatManager").GetComponent<CombatManager>();
-
 		NoSelection();
 	}
 
 	void Update () {
 		RunMouseInputs();
 		RunKeyboardInputs();
-	}
-
-	void HighlightTargets() {
-		targets.Clear();
-		hitChances.Clear();
-
-		foreach (Team team in combatManager.m_teams) {
-			foreach (Actor actor in team.m_actors) {
-				if (actor.actorTeam != grid.selectedActor.actorTeam && !actor.isIncap) {
-					GetTargets(actor);
-				}
-			}
-		}
-
-		foreach (Actor target in targets) {
-			target.SetTargeted();
-		}
-	}
-
-	private void GetTargets(Actor actor) {
-		RaycastHit hit;
-		Vector3 offset = new Vector3(0f, 1.6f, 0f);
-		Vector3 checkDir = (actor.transform.position + offset) - (grid.selectedActor.transform.position + offset);
-		Debug.DrawLine((actor.transform.position + offset), (grid.selectedActor.transform.position + offset));
-		if (Physics.Raycast(grid.selectedActor.transform.position + offset, checkDir, out hit, actor.weapon.m_fRange)) {
-			if (hit.collider.name == actor.name) {
-				targets.Add(actor);
-				hitChances.Add(CalculateHitChance(actor));
-			}
-		}
-	}
-
-	int CalculateHitChance(Actor actor) {
-		int r = (int)(60 - ((Vector3.Distance(grid.selectedActor.transform.position, actor.transform.position) / actor.weapon.m_fRange) * 60));
-		int c = (40 - (CheckTargetCover(actor) * 20));
-		int chanceToHit = r + c;
-		//Debug.Log(chanceToHit);
-		return chanceToHit;
-	}
-
-	public int CheckTargetCover(Actor target) {
-		Vector3 checkDir = target.transform.position - grid.selectedActor.transform.position;
-		int c = 0;
-
-		checkDir.x = (int)checkDir.x;
-		checkDir.y = (int)checkDir.y;
-		checkDir.z = (int)checkDir.z;
-
-		if (checkDir.z > 0f) {
-			if (c <= grid.tileTypes[grid.tiles[target.tileX, target.tileZ - 1]].m_iCoverRating) {
-				c = grid.tileTypes[grid.tiles[target.tileX, target.tileZ - 1]].m_iCoverRating;
-			}
-		}
-		else if (checkDir.z < 0f) {
-			if (c <= grid.tileTypes[grid.tiles[target.tileX, target.tileZ + 1]].m_iCoverRating) {
-				c = grid.tileTypes[grid.tiles[target.tileX, target.tileZ + 1]].m_iCoverRating;
-			}
-		}
-		else {
-			if (checkDir.x > 0f) {
-				if (c <= grid.tileTypes[grid.tiles[target.tileX - 1, target.tileZ]].m_iCoverRating) {
-					c = grid.tileTypes[grid.tiles[target.tileX - 1, target.tileZ]].m_iCoverRating;
-				}
-			}
-			else {
-				if (c <= grid.tileTypes[grid.tiles[target.tileX + 1, target.tileZ]].m_iCoverRating) {
-					c = grid.tileTypes[grid.tiles[target.tileX + 1, target.tileZ]].m_iCoverRating;
-				}
-			}
-		}
-
-		if (checkDir.x > 0f) {
-			if (c <= grid.tileTypes[grid.tiles[target.tileX - 1, target.tileZ]].m_iCoverRating) {
-				c = grid.tileTypes[grid.tiles[target.tileX - 1, target.tileZ]].m_iCoverRating;
-			}
-		}
-		else if (checkDir.x < 0f) {
-			if (c <= grid.tileTypes[grid.tiles[target.tileX + 1, target.tileZ]].m_iCoverRating) {
-				c = grid.tileTypes[grid.tiles[target.tileX + 1, target.tileZ]].m_iCoverRating;
-			}
-		}
-		else {
-			if (checkDir.z > 0f) {
-				if (c <= grid.tileTypes[grid.tiles[target.tileX, target.tileZ - 1]].m_iCoverRating) {
-					c = grid.tileTypes[grid.tiles[target.tileX, target.tileZ - 1]].m_iCoverRating;
-				}
-			}
-			else {
-				if (c <= grid.tileTypes[grid.tiles[target.tileX, target.tileZ + 1]].m_iCoverRating) {
-					c = grid.tileTypes[grid.tiles[target.tileX, target.tileZ + 1]].m_iCoverRating;
-				}
-			}
-		}
-
-		return c;
-	}
-
-	public void ClearTargets() {
-		foreach (Actor target in targets) {
-			target.ClearTargeted();
-		}
 	}
 
 	void RunMouseInputs() {
@@ -146,7 +40,7 @@ public class InputManager : MonoBehaviour {
 				if (hit.transform.GetComponent<Actor>()) {
 					if (hit.transform.GetComponent<Actor>().actorTeam == combatManager.m_iActiveTeam) {
 						if(grid.selectedActor != null) {
-							if (hit.transform.name == grid.selectedActor.name && currentState == InputState.Idle) {
+							if (hit.transform.name == grid.selectedActor.name && m_currentState == InputState.Idle) {
 								if(grid.selectedActor.hasMoved || grid.selectedActor.hasActed) {
 									return;
 								}
@@ -157,7 +51,7 @@ public class InputManager : MonoBehaviour {
 						}
 						else if (!hit.transform.GetComponent<Actor>().hasActed) {
 							grid.selectedActor = hit.transform.GetComponent<Actor>();
-							currentState = InputState.Idle;
+							m_currentState = InputState.Idle;
 							UpdateInputUI();
 							grid.selectedActor.Selected();
 						}
@@ -204,14 +98,14 @@ public class InputManager : MonoBehaviour {
 		}
 
 		if (Input.GetKeyDown(KeyCode.Escape)) {
-			switch (currentState) {
+			switch (m_currentState) {
 				case InputState.NoSelection:
 					break;
 				case InputState.Idle:
 					if (grid.selectedActor && !grid.selectedActor.hasActed && !grid.selectedActor.hasMoved) {
 						grid.selectedActor.Deselected();
 						grid.selectedActor = null;
-						currentState = InputState.NoSelection;
+						m_currentState = InputState.NoSelection;
 						UpdateInputUI();
 					}
 					break;
@@ -237,36 +131,36 @@ public class InputManager : MonoBehaviour {
 	private void NoSelection() {
 		if (grid.selectedActor) {
 			grid.selectedActor.Deselected();
-			ClearTargets();
+			combatManager.ClearTargets();
 			grid.selectedActor = null;
 		}
 
-		currentState = InputState.NoSelection;
+		m_currentState = InputState.NoSelection;
 		UpdateInputUI();
 	}
 
 	private void Idle() {
 		if (grid.selectedActor) {
-			currentState = InputState.Idle;
-			ClearTargets();
+			m_currentState = InputState.Idle;
+			combatManager.ClearTargets();
 			grid.ResetMovement();
 			UpdateInputUI();
 		}
 	}
 
 	private void Move() {
-		ClearTargets();
+		combatManager.ClearTargets();
 		if (grid.selectedActor) {
 			grid.selectedActor.ReloadDeactive();
 			if (!grid.selectedActor.hasMoved && !grid.selectedActor.hasActed) {
-				if (currentState != InputState.Moving) {
+				if (m_currentState != InputState.Moving) {
 					grid.DisplayAvailableMovement(grid.selectedActor.moveDist);
-					currentState = InputState.Moving;
+					m_currentState = InputState.Moving;
 					UpdateInputUI();
 				}
 				else {
 					grid.ResetMovement();
-					currentState = InputState.Idle;
+					m_currentState = InputState.Idle;
 					UpdateInputUI();
 				}
 			}
@@ -278,14 +172,14 @@ public class InputManager : MonoBehaviour {
 		if (grid.selectedActor) {
 			grid.selectedActor.ReloadDeactive();
 			if (!grid.selectedActor.hasActed) {
-				if (currentState != InputState.Aiming) {
-					HighlightTargets();
-					currentState = InputState.Aiming;
+				if (m_currentState != InputState.Aiming) {
+					combatManager.HighlightTargets();
+					m_currentState = InputState.Aiming;
 					UpdateInputUI();
 				}
 				else {
-					ClearTargets();
-					currentState = InputState.Idle;
+					combatManager.ClearTargets();
+					m_currentState = InputState.Idle;
 					UpdateInputUI();
 				}
 			}
@@ -294,18 +188,18 @@ public class InputManager : MonoBehaviour {
 
 	private void Reload() {
 		grid.ResetMovement();
-		ClearTargets();
+		combatManager.ClearTargets();
 
 		if (grid.selectedActor) {
 			if (!grid.selectedActor.hasActed) {
-				if (currentState != InputState.Reloading) {
+				if (m_currentState != InputState.Reloading) {
 					grid.selectedActor.ReloadActive();
-					currentState = InputState.Reloading;
+					m_currentState = InputState.Reloading;
 					UpdateInputUI();
 				}
 				else {
 					grid.selectedActor.ReloadDeactive();
-					currentState = InputState.Idle;
+					m_currentState = InputState.Idle;
 					UpdateInputUI();
 				}
 			}
@@ -313,44 +207,44 @@ public class InputManager : MonoBehaviour {
 	}
 
 	private void UpdateInputUI() {
-		switch(currentState) {
+		switch(m_currentState) {
 			case InputState.NoSelection:
-				moveButton.interactable = false;
-				aimButton.interactable = false;
-				reloadButton.interactable = false;
+				m_moveButton.interactable = false;
+				m_aimButton.interactable = false;
+				m_reloadButton.interactable = false;
 				break;
 			case InputState.Idle:
 				if (!grid.selectedActor.hasMoved) {
-					moveButton.interactable = true;
+					m_moveButton.interactable = true;
 				}
 				if (!grid.selectedActor.hasActed) {
-					aimButton.interactable = true;
-					reloadButton.interactable = true;
+					m_aimButton.interactable = true;
+					m_reloadButton.interactable = true;
 				}
 				break;
 			case InputState.Moving:
-				moveButton.interactable = false;
+				m_moveButton.interactable = false;
 				if (!grid.selectedActor.hasActed) {
-					aimButton.interactable = true;
-					reloadButton.interactable = true;
+					m_aimButton.interactable = true;
+					m_reloadButton.interactable = true;
 				}
 				break;
 			case InputState.Aiming:
-				aimButton.interactable = false;
+				m_aimButton.interactable = false;
 				if (!grid.selectedActor.hasMoved) {
-					moveButton.interactable = true;
+					m_moveButton.interactable = true;
 				}
 				if (!grid.selectedActor.hasActed) {
-					reloadButton.interactable = true;
+					m_reloadButton.interactable = true;
 				}
 				break;
 			case InputState.Reloading:
-				reloadButton.interactable = false;
+				m_reloadButton.interactable = false;
 				if (!grid.selectedActor.hasMoved) {
-					moveButton.interactable = true;
+					m_moveButton.interactable = true;
 				}
 				if (!grid.selectedActor.hasActed) {
-					aimButton.interactable = true;
+					m_moveButton.interactable = true;
 				}
 				break;
 		}
