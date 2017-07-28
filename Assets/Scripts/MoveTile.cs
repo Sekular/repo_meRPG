@@ -4,21 +4,21 @@ using UnityEngine;
 
 public class MoveTile : MonoBehaviour
 {
-    [HideInInspector] public Vector3 gridPos;
-    private float offset = 0.5f;
+    [HideInInspector] public Vector3 m_vGridPos;    // The MoveTile's position including the offset. Used for placing it in the world during grid generation.
+    private float offset = 0.5f;    // Offset for placing the relevant object for the placeholder grid visual.
 
-	public int tileX, tileZ;
-	[HideInInspector] public Grid grid;
+	public int m_iTileX, m_iTileZ;    // The MoveTile's X and Z coordinates.
+	[HideInInspector] public Grid grid;   // Reference to the grid.
 
 	void Start () {
 		grid = GameObject.Find("Grid").GetComponent<Grid>();
-		gridPos = transform.position;
-        gridPos.z += offset;
-		tileX = (int)transform.position.x;
-		tileZ = (int)transform.position.z;
+    m_vGridPos = transform.position;
+    m_vGridPos.z += offset;
+    m_iTileX = (int)transform.position.x;
+    m_iTileZ = (int)transform.position.z;
 	}
 
-	// This is currently drawing a line on click in conjunction with Actor.Update(). Use this again later for showing the movement of characters.
+	// This is currently drawing a line on click in conjunction with Actor.Update().
 	void OnMouseOver() {
 		if (grid.selectedActor) {
 			if (!grid.selectedActor.isMoving)

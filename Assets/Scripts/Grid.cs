@@ -119,7 +119,7 @@ public class Grid : MonoBehaviour {
 		}
 	}
 
-	// Generates the physical movement grid and initializes MoveTiles.
+  // TODO Remove when no longer required. Initializes MoveTiles and generates a physical representation of the movement grid and blockers.
 	void GenerateGrid() {
 		for (int x = 0; x < m_iMapSizeX; x++) {
 			for (int z = 0; z < m_iMapSizeZ; z++) {
@@ -128,8 +128,8 @@ public class Grid : MonoBehaviour {
 				GameObject go = Instantiate(t.m_tileObject, new Vector3(x, 0f, z), Quaternion.identity);
 
 				MoveTile mt = go.GetComponent<MoveTile>();
-				mt.tileX = x;
-				mt.tileZ = z;
+        mt.m_iTileX = x;
+        mt.m_iTileZ = z;
 				mt.grid = this;
 			}
 		}

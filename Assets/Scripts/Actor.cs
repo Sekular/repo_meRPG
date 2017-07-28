@@ -287,17 +287,6 @@ public class Actor : MonoBehaviour {
 		aimStep = 0f;
 
 		transform.LookAt(finalFacing);
-
-		/*targetDir = (target - transform.position);
-		a = transform.position + targetDir;
-		a.y = 0f;
-		b = (weapon.transform.forward * targetDir.magnitude) + transform.position;
-		b.y = 0f;
-		c = a - b;
-		finalFacing = a + c;
-		aimStep = 0f;
-
-		transform.LookAt(finalFacing);*/
 	}
 
 	public void SetTargeted() {

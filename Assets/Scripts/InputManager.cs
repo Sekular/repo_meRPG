@@ -183,7 +183,7 @@ public class InputManager : MonoBehaviour {
 						if (!grid.selectedActor.hasMoved) {
 							MoveTile gridSquare = hit.transform.GetComponent<MoveTile>();
 							grid.ResetMovement();
-							grid.selectedActor.Move(gridSquare.tileX, gridSquare.tileZ);
+              grid.selectedActor.Move(gridSquare.m_iTileX, gridSquare.m_iTileZ);
 							grid.selectedActor.hasMoved = true;
 							Idle();
 						}
