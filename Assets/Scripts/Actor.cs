@@ -234,12 +234,7 @@ public class Actor : MonoBehaviour {
 
 			Vector3 hitVector = (transform.position - attacker.transform.position);
 
-
 			rigidBodies[0].AddForce(hitVector.x * 10f, hitVector.y * 10f, hitVector.z * 10f, ForceMode.Impulse);
-
-			Debug.Log(gameObject.name + " has been incapacitated.");
-
-			// TODO Play death animation.
 		}
 	}
 

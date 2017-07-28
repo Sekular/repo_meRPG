@@ -39,18 +39,12 @@ public class InputManager : MonoBehaviour {
 	void HighlightTargets() {
 		targets.Clear();
 		hitChances.Clear();
-		
-		foreach (Actor actor in combatManager.team1) {
-      if (actor.actorTeam != grid.selectedActor.actorTeam && !actor.isIncap)
-      {
-				GetTargets(actor);
-			}
-		}
 
-		foreach (Actor actor in combatManager.team2) {
-      if (actor.team != grid.selectedActor.actorTeam && !actor.isIncap)
-      {
-				GetTargets(actor);
+		foreach (Team team in combatManager.m_teams) {
+			foreach (Actor actor in team.m_actors) {
+				if (actor.actorTeam != grid.selectedActor.actorTeam && !actor.isIncap) {
+					GetTargets(actor);
+				}
 			}
 		}
 
@@ -76,7 +70,7 @@ public class InputManager : MonoBehaviour {
 		int r = (int)(60 - ((Vector3.Distance(grid.selectedActor.transform.position, actor.transform.position) / actor.weapon.m_fRange) * 60));
 		int c = (40 - (CheckTargetCover(actor) * 20));
 		int chanceToHit = r + c;
-		Debug.Log(chanceToHit);
+		//Debug.Log(chanceToHit);
 		return chanceToHit;
 	}
 
@@ -150,8 +144,7 @@ public class InputManager : MonoBehaviour {
 
 			if (Physics.Raycast(ray, out hit, 100.0f)) {
 				if (hit.transform.GetComponent<Actor>()) {
-          if (hit.transform.GetComponent<Actor>().actorTeam == combatManager.activeTeam)
-          {
+					if (hit.transform.GetComponent<Actor>().actorTeam == combatManager.m_iActiveTeam) {
 						if(grid.selectedActor != null) {
 							if (hit.transform.name == grid.selectedActor.name && currentState == InputState.Idle) {
 								if(grid.selectedActor.hasMoved || grid.selectedActor.hasActed) {
@@ -186,7 +179,7 @@ public class InputManager : MonoBehaviour {
 						if (!grid.selectedActor.hasMoved) {
 							MoveTile gridSquare = hit.transform.GetComponent<MoveTile>();
 							grid.ResetMovement();
-              grid.selectedActor.Move(gridSquare.m_iTileX, gridSquare.m_iTileZ);
+							grid.selectedActor.Move(gridSquare.m_iTileX, gridSquare.m_iTileZ);
 							grid.selectedActor.hasMoved = true;
 							Idle();
 						}
