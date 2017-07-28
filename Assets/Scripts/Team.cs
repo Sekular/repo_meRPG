@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Team : MonoBehaviour {
-	[HideInInspector] public int m_iTeam = 0;
-	[HideInInspector] public List<Actor> m_actors = new List<Actor>();
+	[HideInInspector] public List<Actor> m_actors = new List<Actor>();		// List of actors on the team.
 
 	public void Init (int i_iTeamNumber) {
 		Actor[] tActors = GetComponentsInChildren<Actor>();
