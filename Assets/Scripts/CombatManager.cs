@@ -4,19 +4,18 @@ using UnityEngine;
 
 public class CombatManager : MonoBehaviour
 {
-    public Actor[] team1;
-    public Actor[] team2;
+    public Team[] m_teams;
 
-    [HideInInspector] public int activeTeam = 0;
+    [HideInInspector] public int m_iActiveTeam = 0;
 
     private int roundNumber = 0;
 
-	private Grid grid;
-	private InputManager input;
+	  private Grid grid;
+	  private InputManager input;
 
 	void Awake() {
 		grid = GameObject.Find("Grid").GetComponent<Grid>();
-		input = GameObject.Find("Main Camera").GetComponent<InputManager>();
+		input = GameObject.Find("InputManager").GetComponent<InputManager>();
 		SetTeams();
 	}
 
@@ -25,18 +24,16 @@ public class CombatManager : MonoBehaviour
 	}
 	
     void SetTeams() {
-        foreach (Actor actor in team1) {
-            actor.team = 1;
-        }
-	
-        foreach (Actor actor in team2) {
-            actor.team = 2;
-        }
+      int i = 0;
+      
+      foreach (Team team in m_teams) {
+        team.Init(i);
+        i++;
+      }
     }
 
     void NewRound() {
         roundNumber++;
-		//Debug.Log("Starting Round " + roundNumber.ToString());
 
 		input.ClearTargets();
         ResetActors();
