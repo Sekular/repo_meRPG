@@ -41,13 +41,15 @@ public class InputManager : MonoBehaviour {
 		hitChances.Clear();
 		
 		foreach (Actor actor in combatManager.team1) {
-			if (actor.team != grid.selectedActor.team && !actor.isIncap) {
+      if (actor.actorTeam != grid.selectedActor.actorTeam && !actor.isIncap)
+      {
 				GetTargets(actor);
 			}
 		}
 
 		foreach (Actor actor in combatManager.team2) {
-			if (actor.team != grid.selectedActor.team && !actor.isIncap) {
+      if (actor.team != grid.selectedActor.actorTeam && !actor.isIncap)
+      {
 				GetTargets(actor);
 			}
 		}
@@ -148,7 +150,8 @@ public class InputManager : MonoBehaviour {
 
 			if (Physics.Raycast(ray, out hit, 100.0f)) {
 				if (hit.transform.GetComponent<Actor>()) {
-					if (hit.transform.GetComponent<Actor>().team == combatManager.activeTeam) {
+          if (hit.transform.GetComponent<Actor>().actorTeam == combatManager.activeTeam)
+          {
 						if(grid.selectedActor != null) {
 							if (hit.transform.name == grid.selectedActor.name && currentState == InputState.Idle) {
 								if(grid.selectedActor.hasMoved || grid.selectedActor.hasActed) {

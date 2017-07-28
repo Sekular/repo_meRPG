@@ -42,7 +42,7 @@ public class Actor : MonoBehaviour {
 	[HideInInspector] public bool hasActed = false;
 	[HideInInspector] public bool hasMoved = false;
 	[HideInInspector] public bool isIncap = false;
-	[HideInInspector] public int team = 0;
+	[HideInInspector] public int actorTeam = 0;
 
 	public GameObject availableIcon;
 	public GameObject selectedIcon;
@@ -114,7 +114,7 @@ public class Actor : MonoBehaviour {
 	}
 
 	public void Move(int x, int z) {
-		combatManager.DeactivateTeammates(team, this);
+		combatManager.DeactivateTeammates(this);
 		isMoving = true;
 		anim.SetBool("IsMoving", true);
 		grid.GeneratePathTo(x, z);
@@ -330,32 +330,22 @@ public class Actor : MonoBehaviour {
 
 	bool CheckFlanked() {
     bool flanked = false;
-    
-    foreach (Actor actor in combatManager.team1) {
-			if (actor.team != team && !actor.isIncap) {
-				RaycastHit hit;
-				Vector3 offset = new Vector3(0f, 1.6f, 0f);
-				Vector3 checkDir = (actor.transform.position + offset) - (transform.position + offset);
-				if (Physics.Raycast(transform.position + offset, checkDir, out hit, actor.weapon.m_fRange)) {
-					if(hit.collider.name == actor.name) {
-						if (CheckCoverValues(checkDir) >= 2) { flanked = true; }
-					}
-				}
-			}
-		}
 
-		foreach (Actor actor in combatManager.team2) {
-			if (actor.team != team && !actor.isIncap) {
-				RaycastHit hit;
-				Vector3 offset = new Vector3(0f, 1.6f, 0f);
-				Vector3 checkDir = (actor.transform.position + offset) - (transform.position + offset);
-				if (Physics.Raycast(transform.position + offset, checkDir, out hit, actor.weapon.m_fRange)) {
-					if (hit.collider.name == actor.name) {
-						if (CheckCoverValues(checkDir) >= 2) { flanked = true; }
-					}
-				}
-			}
-		}
+    foreach (Team team in combatManager.m_teams) {
+        foreach (Actor actor in team.m_actors) {
+            if (actor.actorTeam != actorTeam && !actor.isIncap) {
+                RaycastHit hit;
+                Vector3 offset = new Vector3(0f, 1.6f, 0f);
+                Vector3 checkDir = (actor.transform.position + offset) - (transform.position + offset);
+                if (Physics.Raycast(transform.position + offset, checkDir, out hit, actor.weapon.m_fRange)) {
+                    if (hit.collider.name == actor.name) {
+                        if (CheckCoverValues(checkDir) >= 2) { flanked = true; }
+                    }
+                }
+            }
+        }
+    }
+
 		return flanked;
 	}
 
