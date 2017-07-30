@@ -97,6 +97,12 @@ public class InputManager : MonoBehaviour {
 			Reload();
 		}
 
+		if (Input.GetKeyDown(KeyCode.Return)) {
+			if(m_currentState == InputState.Reloading) {
+				grid.selectedActor.Reload();
+			}
+		}
+
 		if (Input.GetKeyDown(KeyCode.Escape)) {
 			switch (m_currentState) {
 				case InputState.NoSelection:

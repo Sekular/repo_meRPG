@@ -178,7 +178,8 @@ public class Actor : MonoBehaviour {
 
 	public void Attack(Actor target, Actor attacker)
     {
-        StartCoroutine(AttackCR(target, attacker));
+		combatManager.ClearTargets();
+		StartCoroutine(AttackCR(target, attacker));
     }
 
     public IEnumerator AttackCR(Actor target, Actor attacker)
