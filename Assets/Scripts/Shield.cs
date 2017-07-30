@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Shield : MonoBehaviour {
 
-	public GameObject[] m_shieldObjects;		// List of objects that represent the shield visual in game.
-	public float m_fShieldIntensity = 2.5f;		// Intensity of shield visual when initially struck.
-	public float m_fFlashDecay = 2.5f;			// The speed at which the shield intensity decays to 0 after it is struck.
-
-	private void SetShieldIntensity(GameObject so, float i) { so.GetComponent<Renderer>().material.SetFloat("_Strength", i); }
+	public GameObject[] m_shieldObjects;			// List of objects that represent the shield visual in game.
+	public float m_fShieldIntensity = 2.5f;			// Intensity of shield visual when initially struck.
+	public float m_fFlashDecay = 2.5f;				// The speed at which the shield intensity decays to 0 after it is struck.
+	public float m_fShieldBreakPulseSize = 1.5f;    // When the shield breaks, how large the mesh is pulsed for the effect.
+	public float m_fShieldBreakEffectSpeed = 1f;	// When the shield breaks, how quickly the effect moves out and fades.
+	public ParticleSystem m_ShieldBreakPFX;
 
 	public void ShieldHit() {
 		StopAllCoroutines();
@@ -34,7 +35,15 @@ public class Shield : MonoBehaviour {
 		}
 	}
 
-	public void ShieldBroken() {
-		Debug.Log("Play Shield Broken Effect");
+	void Update() {
+		if (Input.GetKeyDown(KeyCode.Space)) {
+			ShieldBroken();
+		}
 	}
+
+	public void ShieldBroken() {
+		m_ShieldBreakPFX.Play();
+	}
+
+	private void SetShieldIntensity(GameObject so, float i) { so.GetComponent<Renderer>().material.SetFloat("_Strength", i); }
 }

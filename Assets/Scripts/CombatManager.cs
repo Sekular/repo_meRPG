@@ -162,8 +162,11 @@ public class CombatManager : MonoBehaviour
 			}
 		}
 
+		int i = 0;
+
 		foreach (Actor target in targets) {
 			target.SetTargeted();
+			i++;
 		}
 	}
 
@@ -175,7 +178,7 @@ public class CombatManager : MonoBehaviour
 		if (Physics.Raycast(grid.selectedActor.transform.position + offset, checkDir, out hit, actor.weapon.m_fRange)) {
 			if (hit.collider.name == actor.name) {
 				targets.Add(actor);
-				hitChances.Add(CalculateHitChance(actor));
+				actor.chanceToHit = CalculateHitChance(actor);
 			}
 		}
 	}

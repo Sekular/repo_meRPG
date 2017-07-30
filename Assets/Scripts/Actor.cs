@@ -20,7 +20,7 @@ public class Actor : MonoBehaviour {
 	[HideInInspector] public bool isMoving;
 
 	public float moveDist = 5;
-	public float moveSpeed = 1;
+	public float moveSpeed = 1f;
 	public float aimSpeed = 1;
 
 	//___COMBAT_________________________________________________//
@@ -29,6 +29,7 @@ public class Actor : MonoBehaviour {
 
 	public float aimDelay;
 	public float fireTime;
+	public ParticleSystem m_HitPFX;
 
 	public int maxHealth;
 	[HideInInspector] public int currentHealth;
@@ -36,6 +37,8 @@ public class Actor : MonoBehaviour {
 	[HideInInspector] public int currentShield;
 
 	private Shield shieldVisual;
+
+	[HideInInspector] public int chanceToHit;
 
 	//___MANAGEMENT_ ___________________________________________//
 	[HideInInspector] public bool isAwaitingOrders = false;
@@ -71,7 +74,7 @@ public class Actor : MonoBehaviour {
 	public void ReloadActive() { reloadIcon.SetActive(true); }
 	public void ReloadDeactive() { reloadIcon.SetActive(false); }
 	public void Deselected() { selectedIcon.SetActive(false); }
-	public void Deactivate() { availableIcon.SetActive(false); selectedIcon.SetActive(false); targetedIcon.SetActive(false); reloadIcon.SetActive(false); }
+	public void Deactivate() { availableIcon.SetActive(false); selectedIcon.SetActive(false); reloadIcon.SetActive(false); }
 
 	void Awake() {
 		SetKinematic(true);
@@ -87,10 +90,6 @@ public class Actor : MonoBehaviour {
 
 		currentHealth = maxHealth;
 		currentShield = maxShield;
-	}
-
-	void Update() {
-		UpdateCover();
 	}
 
 	public void ResetActions() {
@@ -111,6 +110,10 @@ public class Actor : MonoBehaviour {
 				currNode++;
 			}
 		}
+	}
+
+	void Update() {
+		UpdateCover();
 	}
 
 	public void Move(int x, int z) {
@@ -141,6 +144,7 @@ public class Actor : MonoBehaviour {
 			yield return null;
 		}
 
+		UpdateCover();
 		anim.SetBool("IsMoving", false);
 	}
 
@@ -186,7 +190,18 @@ public class Actor : MonoBehaviour {
         weapon.Fire();
 		yield return new WaitForSeconds(fireTime);
         anim.SetBool("IsAiming", false);
-		target.TakeDamage(weapon.m_iDamage, attacker);
+
+		int hitRoll = Random.Range(1, 100);
+
+		Debug.Log("Hit Roll = " + hitRoll);
+		Debug.Log("Need to Hit = " + target.chanceToHit);
+
+		if (hitRoll <= target.chanceToHit) {
+			target.TakeDamage(weapon.m_iDamage, attacker);
+		}
+		else {
+			Debug.Log("Missed Target!");
+		}
 
         hasActed = true;
 
@@ -202,17 +217,23 @@ public class Actor : MonoBehaviour {
 
 	public void TakeDamage(int damage, Actor attacker)
 	{
-		if(currentShield > 0) {
+		if (FlankedByAttacker(attacker)) {
+			damage = damage * 2;
+		}
+
+		if (currentShield > 0) {
 			shieldVisual.ShieldHit();
 			currentShield -= damage;
 			if (currentShield < 0) {
 				shieldVisual.ShieldBroken();
+				m_HitPFX.Play();
 				currentHealth += currentShield;
 
 				currentShield = 0;
 			}
 		}
 		else {
+			m_HitPFX.Play();
 			currentHealth -= damage;
 			if(currentHealth < 0) {
 				currentHealth = 0;
@@ -286,12 +307,13 @@ public class Actor : MonoBehaviour {
 
 	public void SetTargeted() {
 		isTargeted = true;
-		targetedIcon.SetActive(true);
+		actorStats.m_hitChance.GetComponent<Text>().text = (chanceToHit + "%");
+		actorStats.m_hitChance.gameObject.SetActive(true);
 	}
 
 	public void ClearTargeted() {
 		isTargeted = false;
-		targetedIcon.SetActive(false);
+		actorStats.m_hitChance.gameObject.SetActive(false);
 	}
 
 	public void UpdateCover() {
@@ -300,6 +322,7 @@ public class Actor : MonoBehaviour {
 			grid.graph[tileX, tileZ].covSouth == 2 ||
 			grid.graph[tileX, tileZ].covWest  == 2)
 			{
+				anim.SetBool("IsInCover", false);
 				coverIcon.sprite = fullCoverIcon;
 			}
 		else if (grid.graph[tileX, tileZ].covNorth == 1 ||
@@ -307,10 +330,12 @@ public class Actor : MonoBehaviour {
 				 grid.graph[tileX, tileZ].covSouth == 1 ||
 				 grid.graph[tileX, tileZ].covWest  == 1)
 				 {
-				 coverIcon.sprite = halfCoverIcon;
+					anim.SetBool("IsInCover", true);
+					coverIcon.sprite = halfCoverIcon;
 			}
 		else
 		{
+			anim.SetBool("IsInCover", false);
 			coverIcon.sprite = noCoverIcon;
 		}
 
@@ -340,6 +365,21 @@ public class Actor : MonoBehaviour {
             }
         }
     }
+
+		return flanked;
+	}
+
+	bool FlankedByAttacker(Actor attacker) {
+		bool flanked = false;
+
+		RaycastHit hit;
+		Vector3 offset = new Vector3(0f, 1.6f, 0f);
+		Vector3 checkDir = (attacker.transform.position + offset) - (transform.position + offset);
+		if (Physics.Raycast(transform.position + offset, checkDir, out hit, attacker.weapon.m_fRange)) {
+			if (hit.collider.name == attacker.name) {
+				if (CheckCoverValues(checkDir) >= 2) { flanked = true; }
+			}
+		}
 
 		return flanked;
 	}
