@@ -175,6 +175,7 @@ public class CombatManager : MonoBehaviour
 		Vector3 offset = new Vector3(0f, 1.6f, 0f);
 		Vector3 checkDir = (actor.transform.position + offset) - (grid.selectedActor.transform.position + offset);
 		Debug.DrawLine((actor.transform.position + offset), (grid.selectedActor.transform.position + offset));
+    GetLineOfSight((int)grid.selectedActor.transform.position.x, (int)grid.selectedActor.transform.position.z, (int)actor.transform.position.x, (int)actor.transform.position.z);
 		if (Physics.Raycast(grid.selectedActor.transform.position + offset, checkDir, out hit, actor.weapon.m_fRange)) {
 			if (hit.collider.name == actor.name) {
 				targets.Add(actor);
@@ -182,6 +183,43 @@ public class CombatManager : MonoBehaviour
 			}
 		}
 	}
+
+  public void GetLineOfSight(int x, int z, int x2, int z2)
+  {
+    int w = x2 - x;
+    int h = z2 - z;
+    int dx1 = 0, dz1 = 0, dx2 = 0, dz2 = 0;
+    if (w < 0) dx1 = -1; else if (w > 0) dx1 = 1;
+    if (h < 0) dz1 = -1; else if (h > 0) dz1 = 1;
+    if (w < 0) dx2 = -1; else if (w > 0) dx2 = 1;
+    int longest = Mathf.Abs(w);
+    int shortest = Mathf.Abs(h);
+    if (!(longest > shortest))
+    {
+      longest = Mathf.Abs(h);
+      shortest = Mathf.Abs(w);
+      if (h < 0) dz2 = -1; else if (h > 0) dz2 = 1;
+      dx2 = 0;
+    }
+    int numerator = longest >> 1;
+    for (int i = 0; i <= longest; i++)
+    {
+      grid.graph[x,z].m_moveVisual.Activate();
+      //putpixel(x, y, color);
+      numerator += shortest;
+      if (!(numerator < longest))
+      {
+        numerator -= longest;
+        x += dx1;
+        z += dz1;
+      }
+      else
+      {
+        x += dx2;
+        z += dz2;
+      }
+    }
+  }
 
 	public void ClearTargets() {
 		foreach (Actor target in targets) {
