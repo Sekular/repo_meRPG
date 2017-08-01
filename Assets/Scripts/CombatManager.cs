@@ -175,16 +175,20 @@ public class CombatManager : MonoBehaviour
 		Vector3 offset = new Vector3(0f, 1.6f, 0f);
 		Vector3 checkDir = (actor.transform.position + offset) - (grid.selectedActor.transform.position + offset);
 		Debug.DrawLine((actor.transform.position + offset), (grid.selectedActor.transform.position + offset));
-    GetLineOfSight((int)grid.selectedActor.transform.position.x, (int)grid.selectedActor.transform.position.z, (int)actor.transform.position.x, (int)actor.transform.position.z);
-		if (Physics.Raycast(grid.selectedActor.transform.position + offset, checkDir, out hit, actor.weapon.m_fRange)) {
+    GetLineOfSight((int)grid.selectedActor.transform.position.x, (int)grid.selectedActor.transform.position.z, (int)actor.transform.position.x, (int)actor.transform.position.z, checkDir);
+
+    targets.Add(actor);
+    actor.chanceToHit = CalculateHitChance(actor);
+
+		/*if (Physics.Raycast(grid.selectedActor.transform.position + offset, checkDir, out hit, actor.weapon.m_fRange)) {
 			if (hit.collider.name == actor.name) {
-				targets.Add(actor);
-				actor.chanceToHit = CalculateHitChance(actor);
+        targets.Add(actor);
+        actor.chanceToHit = CalculateHitChance(actor);
 			}
-		}
+		}*/
 	}
 
-  public void GetLineOfSight(int x, int z, int x2, int z2)
+  public void GetLineOfSight(int x, int z, int x2, int z2, Vector3 checkDir)
   {
     int w = x2 - x;
     int h = z2 - z;
@@ -205,13 +209,19 @@ public class CombatManager : MonoBehaviour
     for (int i = 0; i <= longest; i++)
     {
       grid.graph[x,z].m_moveVisual.Activate();
-      //putpixel(x, y, color);
+
+      if (grid.tileTypes[grid.tiles[x, z]].m_iCoverRating == 2)
+      {
+        Debug.Log("Hit Full Cover");
+        continue;
+      }
+    
       numerator += shortest;
       if (!(numerator < longest))
       {
         numerator -= longest;
         x += dx1;
-        z += dz1;
+          z += dz1;
       }
       else
       {
